@@ -121,7 +121,7 @@ export function FileUploadSheet({
               </p>
               {maxSize && (
                 <p className="text-muted-foreground text-xs">
-                  (max {Math.round(maxSize / (1024 * 1024))}MB per file)
+                  Massimo {Math.round(maxSize / (1024 * 1024))}MB
                 </p>
               )}
             </div>
