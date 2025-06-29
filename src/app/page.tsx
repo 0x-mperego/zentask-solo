@@ -53,6 +53,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { type FileUploadProps } from "@/components/ui/file-upload"
 
 // Interfacce per le entità correlate
@@ -246,11 +247,19 @@ const createInterventiColumns = (
   onDelete: (id: number) => void
 ): ColumnDef<Intervento>[] => [
   {
-    accessorKey: "codice",
-    header: "Codice",
-    cell: ({ row }) => (
-      <span className="font-mono text-sm">{row.original.codice}</span>
-    ),
+    accessorKey: "id",
+    header: "ID",
+    cell: ({ row }) => {
+      const intervento = row.original
+      return (
+        <div className="flex items-center gap-2">
+          {intervento.urgente && (
+            <div className="w-2 h-2 rounded-full bg-red-500" />
+          )}
+          <span className="font-mono text-sm">{intervento.codice}</span>
+        </div>
+      )
+    },
     enableHiding: false,
   },
   {
@@ -258,14 +267,43 @@ const createInterventiColumns = (
     header: "Descrizione",
     cell: ({ row }) => {
       const intervento = row.original
-      return (
+      const attivitaItem = attivita.find(a => a.id === intervento.attivitaId)
+      
+      // Tronca la descrizione se è troppo lunga
+      const maxLength = 50
+      const isTruncated = intervento.descrizione.length > maxLength
+      const truncatedText = isTruncated 
+        ? intervento.descrizione.substring(0, maxLength) + "..."
+        : intervento.descrizione
+
+      const descriptionContent = (
         <div className="flex items-center gap-2">
-          <span className="font-medium">{intervento.descrizione}</span>
-          {intervento.urgente && (
-            <IconAlertTriangle className="h-4 w-4 text-red-500" />
+          {attivitaItem && (
+            <Badge variant="secondary" className="text-xs">
+              {attivitaItem.nome}
+            </Badge>
           )}
+          <span className="font-medium">{truncatedText}</span>
         </div>
       )
+
+      // Se il testo è troncato, mostra il tooltip
+      if (isTruncated) {
+        return (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="cursor-help">
+                {descriptionContent}
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p className="max-w-xs">{intervento.descrizione}</p>
+            </TooltipContent>
+          </Tooltip>
+        )
+      }
+
+      return descriptionContent
     },
   },
   {
@@ -313,21 +351,24 @@ const createInterventiColumns = (
       if (!dipendente) return <span className="text-muted-foreground">Non assegnato</span>
       
       return (
-        <div className="flex items-center gap-2">
-          <Avatar className="h-6 w-6">
+        <Badge 
+          variant="outline" 
+          className="bg-transparent border-transparent px-2 py-1 flex items-center gap-2 w-fit"
+        >
+          <Avatar className="h-5 w-5">
             <AvatarImage src={dipendente.avatar} />
             <AvatarFallback className="text-xs">
               {getInitials(dipendente.nome, dipendente.cognome)}
             </AvatarFallback>
           </Avatar>
-          <span>{dipendente.nome} {dipendente.cognome}</span>
-        </div>
+          <span className="text-sm">{dipendente.nome} {dipendente.cognome}</span>
+        </Badge>
       )
     },
   },
   {
     accessorKey: "dataInizio",
-    header: "Date",
+    header: "Data",
     cell: ({ row }) => {
       const intervento = row.original
       const dataInizio = intervento.dataInizio
@@ -354,8 +395,34 @@ const createInterventiColumns = (
     },
   },
   {
+    accessorKey: "durata",
+    header: "Durata",
+    cell: ({ row }) => {
+      const durata = row.original.durata
+      if (!durata) return <span className="text-muted-foreground">—</span>
+      
+      // Formatta la durata da HH:MM a formato leggibile
+      const formatDuration = (duration: string): string => {
+        if (!duration || !duration.includes(':')) return duration
+        
+        const [hours, minutes] = duration.split(':')
+        const h = parseInt(hours, 10)
+        const m = parseInt(minutes, 10)
+        
+        if (h === 0 && m === 0) return '—'
+        if (h === 0) return `${m}min`
+        if (m === 0) return `${h}h`
+        return `${h}h ${m}min`
+      }
+      
+      return (
+        <span className="text-sm">{formatDuration(durata)}</span>
+      )
+    },
+  },
+  {
     id: "actions",
-    header: "",
+    header: "Azioni",
     cell: ({ row }) => {
       const intervento = row.original
       return (
