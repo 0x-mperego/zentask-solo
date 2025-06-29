@@ -48,25 +48,28 @@ export function FileUploadSheet({
         // Process each file individually
         const uploadPromises = files.map(async (file) => {
           try {
+            // Initialize progress to 0
+            onProgress(file, 0);
+            
             // Simulate file upload with progress
             const totalChunks = 10;
-            let uploadedChunks = 0;
 
             // Simulate chunk upload with delays
-            for (let i = 0; i < totalChunks; i++) {
+            for (let i = 1; i <= totalChunks; i++) {
               // Simulate network delay (100-300ms per chunk)
               await new Promise((resolve) =>
                 setTimeout(resolve, Math.random() * 200 + 100),
               );
 
               // Update progress for this specific file
-              uploadedChunks++;
-              const progress = (uploadedChunks / totalChunks) * 100;
+              const progress = (i / totalChunks) * 100;
               onProgress(file, progress);
             }
 
-            // Simulate server processing delay
-            await new Promise((resolve) => setTimeout(resolve, 300));
+            // Simulate final server processing delay
+            await new Promise((resolve) => setTimeout(resolve, 200));
+            
+            // Mark as complete
             onSuccess(file);
           } catch (error) {
             onError(
@@ -156,7 +159,7 @@ export function FileUploadSheet({
                     </Button>
                   </FileUploadItemDelete>
                 </div>
-                <FileUploadItemProgress className="w-full" />
+                <FileUploadItemProgress className="w-full" forceMount={false} />
               </FileUploadItem>
             ))}
           </FileUploadList>

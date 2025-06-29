@@ -1191,7 +1191,7 @@ function FileUploadItemProgress(props: FileUploadItemProgressProps) {
 
   if (!itemContext.fileState) return null;
 
-  const shouldRender = forceMount || itemContext.fileState.progress !== 100;
+  const shouldRender = forceMount || (itemContext.fileState.progress !== 100 && itemContext.fileState.status !== "success");
 
   if (!shouldRender) return null;
 

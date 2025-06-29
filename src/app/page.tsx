@@ -631,12 +631,9 @@ export default function Home() {
       return
     }
 
-    if (!formData.dateRange?.to) {
-      toast.error("La data di fine è obbligatoria")
-      return
-    }
+    // Data di fine non più obbligatoria - può essere uguale alla data di inizio
 
-    if (formData.dateRange.to < formData.dateRange.from) {
+    if (formData.dateRange.to && formData.dateRange.to < formData.dateRange.from) {
       toast.error("La data di fine deve essere successiva alla data di inizio")
       return
     }
@@ -655,7 +652,7 @@ export default function Home() {
                 urgente: formData.urgente,
                 dipendenteId: parseInt(formData.dipendenteId),
                 dataInizio: formData.dateRange?.from?.toISOString().split('T')[0] || '',
-                dataFine: formData.dateRange?.to?.toISOString().split('T')[0] || '',
+                dataFine: formData.dateRange?.to?.toISOString().split('T')[0] || formData.dateRange?.from?.toISOString().split('T')[0] || '',
                 durata: formData.durata,
                 note: formData.note,
                 allegati: formData.allegati,
@@ -679,7 +676,7 @@ export default function Home() {
           urgente: formData.urgente,
           dipendenteId: parseInt(formData.dipendenteId),
           dataInizio: formData.dateRange?.from?.toISOString().split('T')[0] || '',
-          dataFine: formData.dateRange?.to?.toISOString().split('T')[0] || '',
+          dataFine: formData.dateRange?.to?.toISOString().split('T')[0] || formData.dateRange?.from?.toISOString().split('T')[0] || '',
           durata: formData.durata,
           note: formData.note,
           allegati: formData.allegati,
@@ -929,13 +926,13 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <FormField label="Date Intervento" htmlFor="dateRange" required>
+          <FormField label="Date Intervento" htmlFor="dateRange" required description="Data fine opzionale (se non specificata, sarà uguale alla data inizio)">
             <DateRangePicker
               value={formData.dateRange}
               onChange={(range) =>
                 setFormData({ ...formData, dateRange: range })
               }
-              placeholder="Seleziona intervallo date"
+              placeholder="Seleziona date intervento"
             />
           </FormField>
 
@@ -964,7 +961,6 @@ export default function Home() {
 
         <FileUploadFormField
           label="Allegati"
-          description="Carica i documenti relativi all'intervento (max 5 file, 10MB ciascuno)"
           files={formData.allegati}
           onFilesChange={(files: File[]) =>
             setFormData({ ...formData, allegati: files })
