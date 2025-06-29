@@ -1007,17 +1007,23 @@ export default function Home() {
           </FormField>
         </div>
 
-        <div className="flex items-center space-x-2">
-          <Switch
-            id="urgente"
-            checked={formData.urgente}
-            onCheckedChange={(checked) =>
-              setFormData({ ...formData, urgente: checked as boolean })
-            }
-          />
-          <Label htmlFor="urgente" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-            Urgente
-          </Label>
+        <div className="rounded-lg border bg-card p-4">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="urgente" className="text-sm font-medium flex items-center gap-2">
+              <span className="text-red-500">
+                <IconAlertTriangle className="h-4 w-4" />
+              </span>
+              Urgente
+            </Label>
+            <Switch
+              id="urgente"
+              checked={formData.urgente}
+              onCheckedChange={(checked) =>
+                setFormData({ ...formData, urgente: checked as boolean })
+              }
+              className="data-[state=checked]:bg-red-500"
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
