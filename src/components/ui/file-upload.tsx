@@ -1050,7 +1050,11 @@ function FileUploadItemPreview(props: FileUploadItemPreviewProps) {
     (file: File) => {
       if (render) return render(file);
 
-      if (itemContext.fileState?.file.type.startsWith("image/")) {
+      if (!file || !file.type) {
+        return getFileIcon(file);
+      }
+
+      if (file.type.startsWith("image/")) {
         let url = urlCache.get(file);
         if (!url) {
           url = URL.createObjectURL(file);
@@ -1075,7 +1079,7 @@ function FileUploadItemPreview(props: FileUploadItemPreviewProps) {
 
       return getFileIcon(file);
     },
-    [render, itemContext.fileState?.file.type, urlCache],
+    [render, itemContext.fileState?.file, urlCache],
   );
 
   if (!itemContext.fileState) return null;
