@@ -220,7 +220,7 @@ export function FileUploadSheet({
         multiple
       >
         <FileUploadDropzone>
-          <div className="flex flex-col items-center gap-1 text-center p-2 min-h-[60px] justify-center hover:bg-muted/50 transition-colors cursor-pointer">
+          <div className="flex flex-col items-center gap-1 text-center p-2 min-h-[60px] justify-center">
             <div className="flex items-center justify-center rounded-full border border-dashed p-1.5">
               <Upload className="size-3 text-muted-foreground" />
             </div>
