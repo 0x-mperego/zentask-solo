@@ -5,8 +5,6 @@ import {
   ChevronsUpDown,
   LogOut,
 } from "lucide-react"
-import { IconMoon, IconSun } from "@tabler/icons-react"
-import { useTheme } from "next-themes"
 
 import {
   Avatar,
@@ -39,7 +37,6 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
-  const { theme, setTheme } = useTheme()
 
   return (
     <SidebarMenu>
@@ -86,10 +83,6 @@ export function NavUser({
                   <User />
                   Account
                 </a>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
-                {theme === "light" ? <IconMoon className="h-4 w-4" /> : <IconSun className="h-4 w-4" />}
-                Tema
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

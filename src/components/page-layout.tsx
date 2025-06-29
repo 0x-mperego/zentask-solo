@@ -19,6 +19,7 @@ import {
 import { PageHeader } from "@/components/page-header"
 import { ContentWrapper } from "@/components/content-wrapper"
 import { useAuth } from "@/contexts/AuthContext"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 interface PageLayoutProps {
   children: React.ReactNode
@@ -89,7 +90,7 @@ export function PageLayout({
   }
 
   return (
-    <SidebarProvider defaultOpen={false}>
+    <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
@@ -99,25 +100,32 @@ export function PageLayout({
               orientation="vertical"
               className="mr-2 data-[orientation=vertical]:h-4"
             />
+            <ThemeToggle />
             {finalBreadcrumbItems.length > 0 && (
-              <Breadcrumb>
-                <BreadcrumbList>
-                  {finalBreadcrumbItems.map((item, index) => (
-                    <React.Fragment key={index}>
-                      {index > 0 && <BreadcrumbSeparator className="hidden md:block" />}
-                      <BreadcrumbItem className={index === 0 ? "hidden md:block" : ""}>
-                        {item.isCurrentPage || !item.href ? (
-                          <BreadcrumbPage>{item.label}</BreadcrumbPage>
-                        ) : (
-                          <BreadcrumbLink href={item.href}>
-                            {item.label}
-                          </BreadcrumbLink>
-                        )}
-                      </BreadcrumbItem>
-                    </React.Fragment>
-                  ))}
-                </BreadcrumbList>
-              </Breadcrumb>
+              <>
+                <Separator
+                  orientation="vertical"
+                  className="mr-2 data-[orientation=vertical]:h-4"
+                />
+                <Breadcrumb>
+                  <BreadcrumbList>
+                    {finalBreadcrumbItems.map((item, index) => (
+                      <React.Fragment key={index}>
+                        {index > 0 && <BreadcrumbSeparator className="hidden md:block" />}
+                        <BreadcrumbItem className={index === 0 ? "hidden md:block" : ""}>
+                          {item.isCurrentPage || !item.href ? (
+                            <BreadcrumbPage>{item.label}</BreadcrumbPage>
+                          ) : (
+                            <BreadcrumbLink href={item.href}>
+                              {item.label}
+                            </BreadcrumbLink>
+                          )}
+                        </BreadcrumbItem>
+                      </React.Fragment>
+                    ))}
+                  </BreadcrumbList>
+                </Breadcrumb>
+              </>
             )}
           </div>
         </header>
