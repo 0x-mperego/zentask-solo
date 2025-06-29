@@ -15,6 +15,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { Switch } from "@/components/ui/switch"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
   Select,
@@ -266,14 +267,7 @@ const createInterventiColumns = (
       if (!cliente) return <span className="text-muted-foreground">—</span>
       
       return (
-        <div className="flex items-center gap-2">
-          {cliente.tipo === "Azienda" ? (
-            <IconBuilding className="h-4 w-4 text-muted-foreground" />
-          ) : (
-            <IconUser className="h-4 w-4 text-muted-foreground" />
-          )}
-          <span className="font-medium">{cliente.nome}</span>
-        </div>
+        <span className="font-medium">{cliente.nome}</span>
       )
     },
   },
@@ -327,11 +321,24 @@ const createInterventiColumns = (
     header: "Date",
     cell: ({ row }) => {
       const intervento = row.original
+      const dataInizio = intervento.dataInizio
+      const dataFine = intervento.dataFine
+      
+      // Se non c'è data di fine o le date coincidono, mostra solo data di inizio
+      if (!dataFine || dataInizio === dataFine) {
+        return (
+          <div className="text-sm">
+            <div>{formatDate(dataInizio)}</div>
+          </div>
+        )
+      }
+      
+      // Altrimenti mostra entrambe le date
       return (
         <div className="text-sm">
-          <div>{formatDate(intervento.dataInizio)}</div>
+          <div>{formatDate(dataInizio)}</div>
           <div className="text-muted-foreground text-xs">
-            → {formatDate(intervento.dataFine)}
+            → {formatDate(dataFine)}
           </div>
         </div>
       )
@@ -826,6 +833,7 @@ export default function Home() {
               searchPlaceholder="Cerca attività..."
               emptyText="Nessuna attività trovata"
               useDrawerOnMobile={true}
+              showCheck={false}
               className="w-full"
             />
           </FormField>
@@ -845,6 +853,7 @@ export default function Home() {
               emptyText="Nessun cliente trovato"
               useDrawerOnMobile={true}
               showIcon={false}
+              showCheck={false}
               className="w-full"
             />
           </FormField>
@@ -852,56 +861,72 @@ export default function Home() {
 
         <div className="grid grid-cols-2 gap-4">
           <FormField label="Stato" htmlFor="statoId" required>
-            <Combobox
-              options={stati.map((stato) => ({
-                value: stato.id.toString(),
-                label: stato.nome,
-              }))}
+            <Select
               value={formData.statoId}
               onValueChange={(value) =>
                 setFormData({ ...formData, statoId: value })
               }
-              placeholder="Seleziona stato"
-              searchPlaceholder="Cerca stato..."
-              emptyText="Nessun stato trovato"
-              useDrawerOnMobile={true}
-              className="w-full"
-            />
+            >
+              <SelectTrigger id="statoId" className="w-full">
+                <SelectValue placeholder="Seleziona stato" />
+              </SelectTrigger>
+              <SelectContent>
+                {stati.map((stato) => (
+                  <SelectItem key={stato.id} value={stato.id.toString()}>
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="w-2 h-2 rounded-full"
+                        style={{ backgroundColor: stato.colore }}
+                      />
+                      {stato.nome}
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </FormField>
 
           <FormField label="Dipendente" htmlFor="dipendenteId" required>
-            <Combobox
-              options={utenti.filter(u => u.ruolo === 'operatore').map((utente) => ({
-                value: utente.id.toString(),
-                label: `${utente.nome} ${utente.cognome}`,
-              }))}
+            <Select
               value={formData.dipendenteId}
               onValueChange={(value) =>
                 setFormData({ ...formData, dipendenteId: value })
               }
-              placeholder="Seleziona dipendente"
-              searchPlaceholder="Cerca dipendente..."
-              emptyText="Nessun dipendente trovato"
-              useDrawerOnMobile={true}
-              className="w-full"
-            />
+            >
+              <SelectTrigger id="dipendenteId" className="w-full">
+                <SelectValue placeholder="Seleziona dipendente" />
+              </SelectTrigger>
+              <SelectContent>
+                {utenti.filter(u => u.ruolo === 'operatore').map((utente) => (
+                  <SelectItem key={utente.id} value={utente.id.toString()}>
+                    <div className="flex items-center gap-2">
+                      <Avatar className="h-5 w-5">
+                        <AvatarImage src={utente.avatar} />
+                        <AvatarFallback className="text-xs">
+                          {getInitials(utente.nome, utente.cognome)}
+                        </AvatarFallback>
+                      </Avatar>
+                      {utente.nome} {utente.cognome}
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </FormField>
         </div>
 
-        <FormField label="Priorità" htmlFor="urgente">
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="urgente"
-              checked={formData.urgente}
-              onCheckedChange={(checked) =>
-                setFormData({ ...formData, urgente: checked as boolean })
-              }
-            />
-            <Label htmlFor="urgente" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-              Contrassegna come urgente
-            </Label>
-          </div>
-        </FormField>
+        <div className="flex items-center space-x-2">
+          <Switch
+            id="urgente"
+            checked={formData.urgente}
+            onCheckedChange={(checked) =>
+              setFormData({ ...formData, urgente: checked as boolean })
+            }
+          />
+          <Label htmlFor="urgente" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            Urgenza
+          </Label>
+        </div>
 
         <div className="grid grid-cols-2 gap-4">
           <FormField label="Date Intervento" htmlFor="dateRange" required>

@@ -42,6 +42,7 @@ interface ComboboxProps {
   className?: string
   disabled?: boolean
   showIcon?: boolean
+  showCheck?: boolean
   useDrawerOnMobile?: boolean
 }
 
@@ -55,6 +56,7 @@ export function Combobox({
   className,
   disabled = false,
   showIcon = true,
+  showCheck = true,
   useDrawerOnMobile = false,
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false)
@@ -78,12 +80,14 @@ export function Combobox({
                 setOpen(false)
               }}
             >
-              <Check
-                className={cn(
-                  "mr-2 h-4 w-4",
-                  value === option.value ? "opacity-100" : "opacity-0"
-                )}
-              />
+              {showCheck && (
+                <Check
+                  className={cn(
+                    "mr-2 h-4 w-4",
+                    value === option.value ? "opacity-100" : "opacity-0"
+                  )}
+                />
+              )}
               {option.label}
             </CommandItem>
           ))}
