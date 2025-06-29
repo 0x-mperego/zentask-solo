@@ -26,6 +26,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { ThemeToggle } from "./theme-toggle"
 
 export function NavUser({
   user,
@@ -83,6 +84,12 @@ export function NavUser({
                   <User />
                   Account
                 </a>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <div className="flex items-center gap-2 w-full">
+                  <ThemeToggle />
+                  <span>Tema</span>
+                </div>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
