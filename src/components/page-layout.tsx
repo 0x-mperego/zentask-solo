@@ -100,33 +100,29 @@ export function PageLayout({
               orientation="vertical"
               className="mr-2 data-[orientation=vertical]:h-4"
             />
-            <ThemeToggle />
             {finalBreadcrumbItems.length > 0 && (
-              <>
-                <Separator
-                  orientation="vertical"
-                  className="mr-2 data-[orientation=vertical]:h-4"
-                />
-                <Breadcrumb>
-                  <BreadcrumbList>
-                    {finalBreadcrumbItems.map((item, index) => (
-                      <React.Fragment key={index}>
-                        {index > 0 && <BreadcrumbSeparator className="hidden md:block" />}
-                        <BreadcrumbItem className={index === 0 ? "hidden md:block" : ""}>
-                          {item.isCurrentPage || !item.href ? (
-                            <BreadcrumbPage>{item.label}</BreadcrumbPage>
-                          ) : (
-                            <BreadcrumbLink href={item.href}>
-                              {item.label}
-                            </BreadcrumbLink>
-                          )}
-                        </BreadcrumbItem>
-                      </React.Fragment>
-                    ))}
-                  </BreadcrumbList>
-                </Breadcrumb>
-              </>
+              <Breadcrumb>
+                <BreadcrumbList>
+                  {finalBreadcrumbItems.map((item, index) => (
+                    <React.Fragment key={index}>
+                      {index > 0 && <BreadcrumbSeparator className="hidden md:block" />}
+                      <BreadcrumbItem className={index === 0 ? "hidden md:block" : ""}>
+                        {item.isCurrentPage || !item.href ? (
+                          <BreadcrumbPage>{item.label}</BreadcrumbPage>
+                        ) : (
+                          <BreadcrumbLink href={item.href}>
+                            {item.label}
+                          </BreadcrumbLink>
+                        )}
+                      </BreadcrumbItem>
+                    </React.Fragment>
+                  ))}
+                </BreadcrumbList>
+              </Breadcrumb>
             )}
+          </div>
+          <div className="ml-auto px-4">
+            <ThemeToggle />
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
