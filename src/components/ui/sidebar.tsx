@@ -213,7 +213,7 @@ function Sidebar({
     )
   }
 
-  if (isMobile) {
+  if (isMobile && collapsible !== "icon") {
     return (
       <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
         <SheetContent
@@ -240,7 +240,10 @@ function Sidebar({
 
   return (
     <div
-      className="group peer text-sidebar-foreground hidden md:block"
+      className={cn(
+        "group peer text-sidebar-foreground",
+        collapsible !== "icon" ? "hidden md:block" : ""
+      )}
       data-state={state}
       data-collapsible={state === "collapsed" ? collapsible : ""}
       data-variant={variant}
