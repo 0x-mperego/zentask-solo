@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/select"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Combobox } from "@/components/ui/combobox"
-import { TimeInput } from "@/components/ui/time-input"
+import { TimePicker } from "@/components/ui/time-picker"
 import { DateRangePicker } from "@/components/ui/date-range-picker"
 import { FileUploadFormField } from "@/components/file-upload-form-field"
 import { DateRange } from "react-day-picker"
@@ -1039,12 +1039,11 @@ export default function Home() {
             </FormField>
 
             <FormField label="Durata" htmlFor="durata">
-              <TimeInput
+              <TimePicker
                 value={formData.durata}
                 onChange={(value) =>
                   setFormData({ ...formData, durata: value })
                 }
-                placeholder="00:00"
               />
             </FormField>
           </div>
