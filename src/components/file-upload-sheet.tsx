@@ -13,7 +13,7 @@ import {
   type FileUploadProps,
   FileUploadTrigger,
 } from "@/components/ui/file-upload";
-import { Upload, X, Paperclip } from "lucide-react";
+import { Upload, X, Paperclip, ExternalLink } from "lucide-react";
 import * as React from "react";
 import { toast } from "sonner";
 
@@ -103,6 +103,10 @@ export function FileUploadSheet({
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
+  const handleFileClick = (url: string) => {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <div className={className}>
       <FileUpload
@@ -118,15 +122,12 @@ export function FileUploadSheet({
         multiple
       >
         <FileUploadDropzone>
-          <div className="flex flex-col items-center gap-2 text-center p-4 min-h-[120px] justify-center">
+          <div className="flex flex-col items-center gap-2 text-center p-3 min-h-[80px] justify-center">
             <div className="flex items-center justify-center rounded-full border border-dashed p-2">
-              <Upload className="size-5 text-muted-foreground" />
+              <Upload className="size-4 text-muted-foreground" />
             </div>
             <div>
               <p className="font-medium text-sm">{label}</p>
-              <p className="text-muted-foreground text-xs mt-1">
-                {description}
-              </p>
               {maxSize && (
                 <p className="text-muted-foreground text-xs">
                   Massimo {Math.round(maxSize / (1024 * 1024))}MB
@@ -137,7 +138,7 @@ export function FileUploadSheet({
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="h-8 text-xs"
+                className="h-7 text-xs"
                 disabled={disabled}
               >
                 Sfoglia file
@@ -152,14 +153,24 @@ export function FileUploadSheet({
             {existingFiles.map((allegato, index) => (
               <div
                 key={index}
-                className="flex items-center gap-2 p-2 border rounded-lg"
+                className="flex items-center gap-2 p-2 border rounded-lg hover:bg-muted/50 cursor-pointer transition-colors"
+                onClick={() => handleFileClick(allegato.url)}
               >
-                <div className="flex items-center justify-center w-8 h-8 rounded border bg-muted">
-                  <Paperclip className="size-4 text-muted-foreground" />
+                <div className="flex items-center justify-center w-10 h-10 rounded border bg-muted overflow-hidden">
+                  {allegato.type.startsWith('image/') ? (
+                    <img 
+                      src={allegato.url} 
+                      alt={allegato.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <Paperclip className="size-4 text-muted-foreground" />
+                  )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-medium truncate">{allegato.name}</p>
+                    <ExternalLink className="size-3 text-muted-foreground" />
                   </div>
                   <p className="text-xs text-muted-foreground">
                     {formatFileSize(allegato.size)}
@@ -172,7 +183,10 @@ export function FileUploadSheet({
                     size="icon"
                     className="size-6 shrink-0"
                     disabled={disabled}
-                    onClick={() => onRemoveExisting(index)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onRemoveExisting(index);
+                    }}
                   >
                     <X className="size-3" />
                   </Button>
@@ -192,7 +206,7 @@ export function FileUploadSheet({
                 className="flex-col gap-2 p-2 border rounded-lg"
               >
                 <div className="flex w-full items-center gap-2">
-                  <FileUploadItemPreview className="shrink-0" />
+                  <FileUploadItemPreview className="shrink-0 w-10 h-10" />
                   <FileUploadItemMetadata size="sm" className="min-w-0 flex-1" />
                   <FileUploadItemDelete asChild>
                     <Button 
