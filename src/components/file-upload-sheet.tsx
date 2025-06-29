@@ -13,9 +13,17 @@ import {
   type FileUploadProps,
   FileUploadTrigger,
 } from "@/components/ui/file-upload";
-import { Upload, X } from "lucide-react";
+import { Upload, X, Paperclip } from "lucide-react";
 import * as React from "react";
 import { toast } from "sonner";
+
+// Interfaccia per gli allegati esistenti
+interface Allegato {
+  name: string;
+  url: string;
+  size: number;
+  type: string;
+}
 
 interface FileUploadSheetProps {
   files: File[];
@@ -28,6 +36,8 @@ interface FileUploadSheetProps {
   description?: string;
   disabled?: boolean;
   className?: string;
+  existingFiles?: Allegato[];
+  onRemoveExisting?: (index: number) => void;
 }
 
 export function FileUploadSheet({
@@ -41,6 +51,8 @@ export function FileUploadSheet({
   description = "Trascina i file qui o clicca per sfogliare",
   disabled = false,
   className,
+  existingFiles = [],
+  onRemoveExisting,
 }: FileUploadSheetProps) {
   const defaultOnUpload: NonNullable<FileUploadProps["onUpload"]> = React.useCallback(
     async (files, { onProgress, onSuccess, onError }) => {
@@ -82,6 +94,14 @@ export function FileUploadSheet({
       description: `"${file.name.length > 30 ? `${file.name.slice(0, 30)}...` : file.name}": ${message}`,
     });
   }, []);
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
 
   return (
     <div className={className}>
@@ -126,6 +146,43 @@ export function FileUploadSheet({
           </div>
         </FileUploadDropzone>
         
+        {/* Allegati esistenti */}
+        {existingFiles.length > 0 && (
+          <div className="mt-3 space-y-2">
+            {existingFiles.map((allegato, index) => (
+              <div
+                key={index}
+                className="flex items-center gap-2 p-2 border rounded-lg"
+              >
+                <div className="flex items-center justify-center w-8 h-8 rounded border bg-muted">
+                  <Paperclip className="size-4 text-muted-foreground" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-medium truncate">{allegato.name}</p>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    {formatFileSize(allegato.size)}
+                  </p>
+                </div>
+                {onRemoveExisting && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="size-6 shrink-0"
+                    disabled={disabled}
+                    onClick={() => onRemoveExisting(index)}
+                  >
+                    <X className="size-3" />
+                  </Button>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+        
+        {/* Nuovi file */}
         {files.length > 0 && (
           <FileUploadList className="mt-3">
             {files.map((file, index) => (

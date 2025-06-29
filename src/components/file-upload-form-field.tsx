@@ -4,6 +4,14 @@ import { FormField } from "@/components/form-field";
 import { FileUploadSheet } from "@/components/file-upload-sheet";
 import { type FileUploadProps } from "@/components/ui/file-upload";
 
+// Interfaccia per gli allegati esistenti
+interface Allegato {
+  name: string;
+  url: string;
+  size: number;
+  type: string;
+}
+
 interface FileUploadFormFieldProps {
   label: string;
   files: File[];
@@ -18,6 +26,8 @@ interface FileUploadFormFieldProps {
   disabled?: boolean;
   required?: boolean;
   className?: string;
+  existingFiles?: Allegato[];
+  onRemoveExisting?: (index: number) => void;
 }
 
 export function FileUploadFormField({
@@ -34,6 +44,8 @@ export function FileUploadFormField({
   disabled = false,
   required = false,
   className,
+  existingFiles = [],
+  onRemoveExisting,
 }: FileUploadFormFieldProps) {
   return (
     <FormField
@@ -52,6 +64,8 @@ export function FileUploadFormField({
         description={uploadDescription}
         disabled={disabled}
         className={className}
+        existingFiles={existingFiles}
+        onRemoveExisting={onRemoveExisting}
       />
     </FormField>
   );
