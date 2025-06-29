@@ -1,56 +1,34 @@
-import { PageHeader } from "@/components/page-header";
-import { PageLayout } from "@/components/page-layout";
+"use client";
+
 import { FileUploadDirectUploadDemo } from "@/components/file-upload-demo";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Upload, Eye, Download, Trash2 } from "lucide-react";
 
 export default function TestUploadPage() {
   return (
-    <PageLayout>
-      <PageHeader
-        title="Test File Upload"
-        description="Test della funzionalità di upload dei file con gestione completa"
-      />
-      <div className="flex flex-col gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Upload className="size-5" />
-              File Upload Component Demo
-            </CardTitle>
-            <CardDescription>
-              Upload, visualizza e gestisci i tuoi file con drag & drop, progress tracking e preview.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                <div className="flex items-center gap-2">
-                  <Upload className="size-4 text-blue-500" />
-                  <span>Drag & Drop o Browse</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Eye className="size-4 text-green-500" />
-                  <span>Preview per immagini/PDF</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Download className="size-4 text-purple-500" />
-                  <span>Download files</span>
-                </div>
-              </div>
-              <div className="text-xs text-muted-foreground space-y-1">
-                <p>• Massimo 5 file per upload</p>
-                <p>• Dimensione massima: 10MB per file</p>
-                <p>• Progress bar in tempo reale</p>
-                <p>• Gestione errori e notifiche</p>
-                <p>• I file vengono salvati temporaneamente in memoria</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+    <div className="container mx-auto py-8">
+      <div className="max-w-2xl mx-auto space-y-8">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold">Test Upload File</h1>
+          <p className="text-muted-foreground mt-2">
+            Prova il componente di upload file con drag & drop
+          </p>
+        </div>
         
-        <FileUploadDirectUploadDemo />
+        <div className="flex justify-center">
+          <FileUploadDirectUploadDemo />
+        </div>
+        
+        <div className="space-y-4 text-sm text-muted-foreground">
+          <h2 className="text-lg font-semibold text-foreground">Caratteristiche:</h2>
+          <ul className="list-disc list-inside space-y-1">
+            <li>Drag & drop supportato</li>
+            <li>Massimo 2 files per volta</li>
+            <li>Barra di progresso simulata</li>
+            <li>Anteprima dei file</li>
+            <li>Cancellazione individuale dei file</li>
+            <li>Toast notifications per i file rifiutati</li>
+          </ul>
+        </div>
       </div>
-    </PageLayout>
+    </div>
   );
 } 
