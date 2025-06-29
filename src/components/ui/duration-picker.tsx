@@ -23,8 +23,10 @@ export function DurationPicker({
   React.useEffect(() => {
     if (value && value.includes(":")) {
       const [h, m] = value.split(":")
-      setHours(h || "")
-      setMinutes(m || "")
+      const hNum = parseInt(h, 10)
+      const mNum = parseInt(m, 10)
+      setHours(isNaN(hNum) ? "" : String(hNum))
+      setMinutes(isNaN(mNum) ? "" : String(mNum))
     } else {
       setHours("")
       setMinutes("")
@@ -39,7 +41,6 @@ export function DurationPicker({
 
   const handleMinutesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let val = e.target.value.replace(/\D/g, "")
-    if (val.length > 2) val = val.slice(0, 2)
     if (parseInt(val, 10) > 59) val = "59"
     setMinutes(val)
     updateValue(hours, val)
@@ -47,31 +48,15 @@ export function DurationPicker({
 
   const updateValue = (h: string, m: string) => {
     if (h || m) {
-      const formattedHours = h.padStart(2, "0")
-      const formattedMinutes = m.padStart(2, "0")
+      const formattedHours = (h || "0").padStart(2, "0")
+      const formattedMinutes = (m || "0").padStart(2, "0")
       onChange?.(`${formattedHours}:${formattedMinutes}`)
     } else {
       onChange?.("")
     }
   }
-
-  const handleBlur = (
-    part: "hours" | "minutes", 
-    currentValue: string, 
-    setter: (val: string) => void
-  ) => {
-    if (currentValue) {
-      const paddedValue = currentValue.padStart(2, "0")
-      setter(paddedValue)
-      if (part === "hours") {
-        updateValue(paddedValue, minutes)
-      } else {
-        updateValue(hours, paddedValue)
-      }
-    }
-  }
   
-  const commonInputClassName = "w-16 text-center text-lg font-semibold tabular-nums caret-transparent focus:bg-accent focus:text-accent-foreground [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [appearance:textfield]"
+  const commonInputClassName = "w-16 text-center text-lg font-semibold tabular-nums focus:bg-accent focus:text-accent-foreground [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [appearance:textfield]"
 
   return (
     <div className={cn("flex items-center gap-2", className)}>
@@ -82,8 +67,7 @@ export function DurationPicker({
           id="hours"
           value={hours}
           onChange={handleHoursChange}
-          onBlur={() => handleBlur("hours", hours, setHours)}
-          placeholder="00"
+          placeholder="0"
           className={commonInputClassName}
           disabled={disabled}
         />
@@ -95,8 +79,7 @@ export function DurationPicker({
           id="minutes"
           value={minutes}
           onChange={handleMinutesChange}
-          onBlur={() => handleBlur("minutes", minutes, setMinutes)}
-          placeholder="00"
+          placeholder="0"
           className={commonInputClassName}
           maxLength={2}
           disabled={disabled}
