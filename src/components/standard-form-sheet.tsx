@@ -24,7 +24,6 @@ interface StandardFormSheetProps {
   trigger?: ReactNode
   side?: "top" | "bottom" | "left" | "right"
   forceSide?: boolean
-  headerExtra?: ReactNode
 }
 
 export function StandardFormSheet({
@@ -40,7 +39,6 @@ export function StandardFormSheet({
   trigger,
   side = "right",
   forceSide = false,
-  headerExtra,
 }: StandardFormSheetProps) {
   const isMobile = useIsMobile()
   
@@ -59,11 +57,6 @@ export function StandardFormSheet({
       <SheetHeader className="text-left">
         <SheetTitle>{title}</SheetTitle>
         <SheetDescription>{description}</SheetDescription>
-        {headerExtra && (
-          <div className="pt-4">
-            {headerExtra}
-          </div>
-        )}
       </SheetHeader>
       
       <form 

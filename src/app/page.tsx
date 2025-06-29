@@ -890,19 +890,13 @@ export default function Home() {
       <StandardFormSheet
         open={isSheetOpen}
         onOpenChange={setIsSheetOpen}
-        title={editingItem ? "Modifica Intervento" : "Nuovo Intervento"}
+        title={editingItem ? `Modifica Intervento ${editingItem.codice}` : "Nuovo Intervento"}
         description={editingItem
           ? "Modifica i dettagli dell'intervento selezionato"
           : "Crea un nuovo intervento compilando tutti i campi richiesti"}
         onSubmit={handleSubmit}
         onCancel={() => setIsSheetOpen(false)}
         submitText={editingItem ? "Salva Modifiche" : "Crea Intervento"}
-        headerExtra={editingItem ? (
-          <div>
-            <div className="text-xs text-muted-foreground">ID Intervento</div>
-            <div className="font-mono text-sm font-medium">{editingItem.codice}</div>
-          </div>
-        ) : undefined}
       >
         <FormField label="Descrizione" htmlFor="descrizione" required>
           <Input
