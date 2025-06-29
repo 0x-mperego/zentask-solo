@@ -109,6 +109,8 @@ export function FileUploadSheet({
     }
   };
 
+  const hasFiles = (existingFiles && existingFiles.length > 0) || files.length > 0;
+
   return (
     <div className={className}>
       <FileUpload
@@ -149,10 +151,11 @@ export function FileUploadSheet({
           </div>
         </FileUploadDropzone>
         
-        {/* Allegati esistenti */}
-        {existingFiles && existingFiles.length > 0 && (
+        {/* Sezione unica per tutti i file */}
+        {hasFiles && (
           <div className="mt-3 space-y-2">
-            {existingFiles.filter(allegato => allegato && allegato.name && allegato.url).map((allegato, index) => (
+            {/* File esistenti */}
+            {existingFiles && existingFiles.filter(allegato => allegato && allegato.name && allegato.url).map((allegato, index) => (
               <div
                 key={`existing-${index}`}
                 className="flex items-center gap-2 p-2 border rounded-lg hover:bg-muted/50 cursor-pointer transition-colors"
@@ -195,15 +198,11 @@ export function FileUploadSheet({
                 )}
               </div>
             ))}
-          </div>
-        )}
-        
-        {/* Nuovi file */}
-        {files.length > 0 && (
-          <FileUploadList className="mt-3">
+            
+            {/* File in upload */}
             {files.map((file, index) => (
               <FileUploadItem 
-                key={index} 
+                key={`uploading-${index}`} 
                 value={file} 
                 className="flex-col gap-2 p-2 border rounded-lg"
               >
@@ -224,7 +223,7 @@ export function FileUploadSheet({
                 <FileUploadItemProgress className="w-full" forceMount={false} />
               </FileUploadItem>
             ))}
-          </FileUploadList>
+          </div>
         )}
       </FileUpload>
     </div>
