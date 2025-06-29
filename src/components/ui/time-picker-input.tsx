@@ -38,34 +38,32 @@ export const TimePickerInput = React.forwardRef<
     setFlag(false)
   }
 
-  const selectedDate = date ?? new Date(Date.now())
-
   const getArrowByType = (
     e: React.KeyboardEvent<HTMLInputElement>,
     type: "increase" | "decrease",
   ) => {
-    const newDate = new Date(selectedDate)
+    const newDate = date ? new Date(date) : new Date(new Date().setHours(0, 0, 0, 0));
     if (picker === "hours") {
       const newHours =
         type === "increase"
-          ? (selectedDate.getHours() + 1) % 24
-          : (selectedDate.getHours() - 1 + 24) % 24
+          ? (newDate.getHours() + 1) % 24
+          : (newDate.getHours() - 1 + 24) % 24
       newDate.setHours(newHours)
       return newDate
     }
     if (picker === "minutes") {
       const newMinutes =
         type === "increase"
-          ? (selectedDate.getMinutes() + 1) % 60
-          : (selectedDate.getMinutes() - 1 + 60) % 60
+          ? (newDate.getMinutes() + 1) % 60
+          : (newDate.getMinutes() - 1 + 60) % 60
       newDate.setMinutes(newMinutes)
       return newDate
     }
     if (picker === "seconds") {
       const newSeconds =
         type === "increase"
-          ? (selectedDate.getSeconds() + 1) % 60
-          : (selectedDate.getSeconds() - 1 + 60) % 60
+          ? (newDate.getSeconds() + 1) % 60
+          : (newDate.getSeconds() - 1 + 60) % 60
       newDate.setSeconds(newSeconds)
       return newDate
     }
@@ -85,7 +83,7 @@ export const TimePickerInput = React.forwardRef<
   }
 
   const handlePickerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newDate = new Date(selectedDate)
+    const newDate = date ? new Date(date) : new Date(new Date().setHours(0, 0, 0, 0));
     const value = e.target.value
     if (picker === "hours") {
       newDate.setHours(parseInt(value))
@@ -119,10 +117,10 @@ export const TimePickerInput = React.forwardRef<
         date
           ? padWithZero(
               picker === "hours"
-                ? selectedDate.getHours()
+                ? new Date(date).getHours()
                 : picker === "minutes"
-                  ? selectedDate.getMinutes()
-                  : selectedDate.getSeconds(),
+                  ? new Date(date).getMinutes()
+                  : new Date(date).getSeconds(),
             )
           : ""
       }
