@@ -44,6 +44,7 @@ import {
   IconUser,
   IconBuilding,
 } from "@tabler/icons-react"
+import { X } from "lucide-react"
 import { toast } from "sonner"
 import { useIsMobile } from "@/hooks/use-mobile"
 import {
@@ -701,12 +702,7 @@ export default function Home() {
     }
 
     try {
-      const finalAllegati = [
-        ...(editingItem?.allegati || []),
-        ...formData.uploadedAllegati
-      ].filter((allegato, index, self) =>
-        index === self.findIndex((a) => a.url === allegato.url)
-      )
+      const finalAllegati = formData.uploadedAllegati;
 
       if (editingItem) {
         // Modifica intervento esistente
@@ -1030,50 +1026,54 @@ export default function Home() {
           />
         </FormField>
 
-        {formData.uploadedAllegati.length > 0 && (
-          <div>
-            <Label>Allegati caricati</Label>
-            <ul className="mt-2 space-y-2">
-              {formData.uploadedAllegati.map((allegato, index) => (
-                <li key={index} className="flex items-center justify-between text-sm p-2 border rounded-md">
-                  <div className="flex items-center gap-2">
-                    <IconPaperclip className="h-4 w-4" />
-                    <a href={allegato.url} target="_blank" rel="noopener noreferrer" className="hover:underline">
-                      {allegato.name}
-                    </a>
-                  </div>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="h-6 w-6"
-                    onClick={() => {
-                      setFormData(prev => ({
-                        ...prev,
-                        uploadedAllegati: prev.uploadedAllegati.filter((_, i) => i !== index)
-                      }))
-                    }}
-                  >
-                    <IconTrash className="h-4 w-4 text-destructive" />
-                  </Button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        <FormField label="Allegati">
+          <div className="space-y-3">
+            {formData.uploadedAllegati.length > 0 && (
+              <ul className="space-y-2">
+                {formData.uploadedAllegati.map((allegato, index) => (
+                   <li key={index} className="flex flex-col gap-2 p-2 border rounded-lg">
+                     <div className="flex w-full items-center gap-2">
+                       <div className="flex items-center justify-center h-10 w-10 shrink-0 rounded-md bg-muted">
+                         <IconPaperclip className="h-5 w-5" />
+                       </div>
+                       <div className="min-w-0 flex-1 text-sm">
+                         <p className="font-medium text-foreground truncate">{allegato.name}</p>
+                         <p className="text-muted-foreground">{(allegato.size / 1024).toFixed(1)} KB</p>
+                       </div>
+                       <Button
+                         type="button"
+                         variant="ghost"
+                         size="icon"
+                         className="size-7 shrink-0"
+                         onClick={() => {
+                           setFormData(prev => ({
+                             ...prev,
+                             uploadedAllegati: prev.uploadedAllegati.filter((_, i) => i !== index)
+                           }))
+                         }}
+                       >
+                         <X className="size-4" />
+                       </Button>
+                     </div>
+                   </li>
+                ))}
+              </ul>
+            )}
 
-        <FileUploadFormField
-          label="Aggiungi nuovi allegati"
-          files={formData.allegati}
-          onFilesChange={(files: File[]) =>
-              setFormData({ ...formData, allegati: files })
-            }
-          onUpload={handleUpload}
-          maxSize={10 * 1024 * 1024} // 10MB
-          accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp,.txt,.zip,.rar"
-          uploadLabel="Carica documenti"
-          uploadDescription="Trascina i file qui o clicca per sfogliare"
-        />
+            <FileUploadFormField
+              label="" // Label is now provided by the parent FormField
+              files={formData.allegati}
+              onFilesChange={(files: File[]) =>
+                  setFormData({ ...formData, allegati: files })
+                }
+              onUpload={handleUpload}
+              maxSize={10 * 1024 * 1024} // 10MB
+              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp,.txt,.zip,.rar"
+              uploadLabel="Carica documenti"
+              uploadDescription="Trascina i file qui o clicca per sfogliare"
+            />
+          </div>
+        </FormField>
       </StandardFormSheet>
 
       {/* FAB for mobile */}
