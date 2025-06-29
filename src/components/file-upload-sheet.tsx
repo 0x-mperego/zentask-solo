@@ -220,7 +220,7 @@ export function FileUploadSheet({
                     </Button>
                   </FileUploadItemDelete>
                 </div>
-                <FileUploadItemProgress className="w-full" forceMount={false} />
+                <FileUploadItemProgress className="w-full" forceMount={true} />
               </FileUploadItem>
             ))}
           </div>

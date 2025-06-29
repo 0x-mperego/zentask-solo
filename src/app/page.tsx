@@ -561,6 +561,9 @@ export default function Home() {
       const xhr = new XMLHttpRequest()
       xhr.open("POST", "/api/upload")
 
+      // Inizia sempre con 0% per mostrare la progress bar
+      onProgress(file, 0)
+
       xhr.upload.onprogress = (event) => {
         if (event.lengthComputable) {
           const percentComplete = Math.round((event.loaded / event.total) * 100)
@@ -568,17 +571,24 @@ export default function Home() {
         }
       }
 
-      xhr.onload = () => {
+      xhr.onload = async () => {
         if (xhr.status >= 200 && xhr.status < 300) {
           try {
             const data = JSON.parse(xhr.responseText)
             if (data.success) {
+              // Assicurati che arrivi al 100% e sia visibile
+              onProgress(file, 100)
+              
+              // Piccolo delay per rendere visibile il completamento
+              await new Promise(resolve => setTimeout(resolve, 200))
+              
               setFormData(prev => ({
                 ...prev,
                 uploadedAllegati: [
                   ...prev.uploadedAllegati,
                   { name: file.name, url: data.url, size: file.size, type: file.type }
                 ],
+                // Rimuovi il file dalla lista files dopo l'upload
                 allegati: prev.allegati.filter(f => f !== file)
               }))
               onSuccess(file)
