@@ -890,9 +890,9 @@ export default function Home() {
       <StandardFormSheet
         open={isSheetOpen}
         onOpenChange={setIsSheetOpen}
-        title={editingItem ? `Modifica Intervento ${editingItem.codice}` : "Nuovo Intervento"}
+        title={editingItem ? editingItem.codice : "Nuovo Intervento"}
         description={editingItem
-          ? "Modifica i dettagli dell'intervento selezionato"
+          ? "Modifica i dettagli dell'intervento"
           : "Crea un nuovo intervento compilando tutti i campi richiesti"}
         onSubmit={handleSubmit}
         onCancel={() => setIsSheetOpen(false)}
@@ -1063,7 +1063,7 @@ export default function Home() {
           onUpload={handleUpload}
           maxSize={10 * 1024 * 1024} // 10MB
           accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp,.txt,.zip,.rar"
-          uploadLabel="Carica documenti"
+          uploadLabel="Upload allegati"
           uploadDescription="Trascina i file qui o clicca per sfogliare"
           existingFiles={formData.uploadedAllegati}
           onRemoveExisting={(index) => {
