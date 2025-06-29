@@ -25,29 +25,9 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 
-const SIDEBAR_COOKIE_NAME = "sidebar_state"
-const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
 const SIDEBAR_WIDTH = "16rem"
 const SIDEBAR_WIDTH_MOBILE = "18rem"
 const SIDEBAR_WIDTH_ICON = "3rem"
-const SIDEBAR_KEYBOARD_SHORTCUT = "b"
-
-// Helper function to read sidebar state from cookie
-function getSidebarStateFromCookie(): boolean | null {
-  if (typeof document === 'undefined') return null
-  
-  const cookies = document.cookie.split(';')
-  const sidebarCookie = cookies.find(cookie => 
-    cookie.trim().startsWith(`${SIDEBAR_COOKIE_NAME}=`)
-  )
-  
-  if (sidebarCookie) {
-    const value = sidebarCookie.split('=')[1]
-    return value === 'true'
-  }
-  
-  return null
-}
 
 type SidebarContextProps = {
   state: "expanded" | "collapsed"
@@ -71,92 +51,32 @@ function useSidebar() {
 }
 
 function SidebarProvider({
-  defaultOpen = true,
-  open: openProp,
-  onOpenChange: setOpenProp,
   className,
   style,
   children,
   ...props
-}: React.ComponentProps<"div"> & {
-  defaultOpen?: boolean
-  open?: boolean
-  onOpenChange?: (open: boolean) => void
-}) {
+}: React.ComponentProps<"div">) {
   const isMobile = useIsMobile()
   const [openMobile, setOpenMobile] = React.useState(false)
 
-  // Read the sidebar state from cookie on initial load
-  const getInitialState = React.useCallback(() => {
-    const savedState = getSidebarStateFromCookie()
-    return savedState !== null ? savedState : defaultOpen
-  }, [defaultOpen])
-
-  // This is the internal state of the sidebar.
-  // We use openProp and setOpenProp for control from outside the component.
-  const [_open, _setOpen] = React.useState(getInitialState)
-  const open = openProp ?? _open
-  const setOpen = React.useCallback(
-    (value: boolean | ((value: boolean) => boolean)) => {
-      const openState = typeof value === "function" ? value(open) : value
-      if (setOpenProp) {
-        setOpenProp(openState)
-      } else {
-        _setOpen(openState)
-      }
-
-      // This sets the cookie to keep the sidebar state.
-      document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
-    },
-    [setOpenProp, open]
-  )
-
-  // Helper to toggle the sidebar.
   const toggleSidebar = React.useCallback(() => {
-    return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open)
-  }, [isMobile, setOpen, setOpenMobile])
-
-  // Sync the initial state from cookie after mount (for hydration)
-  React.useEffect(() => {
-    if (!openProp) {
-      const savedState = getSidebarStateFromCookie()
-      if (savedState !== null && savedState !== _open) {
-        _setOpen(savedState)
-      }
+    // Only for mobile
+    if (isMobile) {
+      setOpenMobile((v) => !v)
     }
-  }, [openProp, _open])
-
-  // Adds a keyboard shortcut to toggle the sidebar.
-  React.useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (
-        event.key === SIDEBAR_KEYBOARD_SHORTCUT &&
-        (event.metaKey || event.ctrlKey)
-      ) {
-        event.preventDefault()
-        toggleSidebar()
-      }
-    }
-
-    window.addEventListener("keydown", handleKeyDown)
-    return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [toggleSidebar])
-
-  // We add a state so that we can do data-state="expanded" or "collapsed".
-  // This makes it easier to style the sidebar with Tailwind classes.
-  const state = open ? "expanded" : "collapsed"
+  }, [isMobile, setOpenMobile])
 
   const contextValue = React.useMemo<SidebarContextProps>(
     () => ({
-      state,
-      open,
-      setOpen,
+      state: "collapsed",
+      open: false,
+      setOpen: () => {}, // No-op for desktop
       isMobile,
       openMobile,
       setOpenMobile,
       toggleSidebar,
     }),
-    [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar]
+    [isMobile, openMobile, toggleSidebar]
   )
 
   return (
@@ -286,32 +206,6 @@ function Sidebar({
         </div>
       </div>
     </div>
-  )
-}
-
-function SidebarTrigger({
-  className,
-  onClick,
-  ...props
-}: React.ComponentProps<typeof Button>) {
-  const { toggleSidebar } = useSidebar()
-
-  return (
-    <Button
-      data-sidebar="trigger"
-      data-slot="sidebar-trigger"
-      variant="ghost"
-      size="icon"
-      className={cn("size-7", className)}
-      onClick={(event) => {
-        onClick?.(event)
-        toggleSidebar()
-      }}
-      {...props}
-    >
-      <PanelLeftIcon />
-      <span className="sr-only">Toggle Sidebar</span>
-    </Button>
   )
 }
 
@@ -757,6 +651,5 @@ export {
   SidebarProvider,
   SidebarRail,
   SidebarSeparator,
-  SidebarTrigger,
   useSidebar,
 }
