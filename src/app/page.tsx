@@ -563,24 +563,42 @@ export default function Home() {
 
       // Inizia sempre con 0% per mostrare la progress bar
       onProgress(file, 0)
+      
+      // Simula progress graduale per rendere visibile l'animazione
+      let simulatedProgress = 0
+      const progressInterval = setInterval(() => {
+        if (simulatedProgress < 90) {
+          simulatedProgress += Math.random() * 15 + 5 // Incremento casuale tra 5-20%
+          onProgress(file, Math.min(simulatedProgress, 90))
+        }
+      }, 100) // Aggiorna ogni 100ms
 
       xhr.upload.onprogress = (event) => {
         if (event.lengthComputable) {
-          const percentComplete = Math.round((event.loaded / event.total) * 100)
-          onProgress(file, percentComplete)
+          const realProgress = Math.round((event.loaded / event.total) * 100)
+          // Usa il progresso reale se è maggiore di quello simulato
+          if (realProgress > simulatedProgress) {
+            simulatedProgress = realProgress
+            onProgress(file, realProgress)
+          }
         }
       }
 
       xhr.onload = async () => {
+        clearInterval(progressInterval) // Ferma la simulazione
+        
         if (xhr.status >= 200 && xhr.status < 300) {
           try {
             const data = JSON.parse(xhr.responseText)
             if (data.success) {
-              // Assicurati che arrivi al 100% e sia visibile
-              onProgress(file, 100)
+              // Animazione finale da 90% a 100%
+              for (let progress = Math.max(simulatedProgress, 90); progress <= 100; progress += 2) {
+                onProgress(file, progress)
+                await new Promise(resolve => setTimeout(resolve, 50))
+              }
               
-              // Piccolo delay per rendere visibile il completamento
-              await new Promise(resolve => setTimeout(resolve, 200))
+              // Mantieni il 100% visibile per un momento
+              await new Promise(resolve => setTimeout(resolve, 300))
               
               setFormData(prev => ({
                 ...prev,
@@ -588,7 +606,6 @@ export default function Home() {
                   ...prev.uploadedAllegati,
                   { name: file.name, url: data.url, size: file.size, type: file.type }
                 ],
-                // Rimuovi il file dalla lista files dopo l'upload
                 allegati: prev.allegati.filter(f => f !== file)
               }))
               onSuccess(file)
@@ -604,6 +621,7 @@ export default function Home() {
       }
 
       xhr.onerror = () => {
+        clearInterval(progressInterval)
         onError(file, new Error("An error occurred during the upload."))
       }
 
