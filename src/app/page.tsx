@@ -578,7 +578,8 @@ export default function Home() {
                 uploadedAllegati: [
                   ...prev.uploadedAllegati,
                   { name: file.name, url: data.url, size: file.size, type: file.type }
-                ]
+                ],
+                allegati: prev.allegati.filter(f => f !== file)
               }))
               onSuccess(file)
             } else {
