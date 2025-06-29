@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/sidebar"
 import { useAuth } from "@/contexts/AuthContext"
 import { useSettings } from "@/contexts/SettingsContext"
+import { ThemeToggle } from "./theme-toggle"
 
 // Data for ZenTask navigation
 const data = {
@@ -114,7 +115,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain items={data.navMain} />
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="flex-col !items-stretch !p-0">
+        <div className="flex grow flex-col" />
+        <ThemeToggle />
         <NavUser user={userData} />
       </SidebarFooter>
       <SidebarRail />
