@@ -564,14 +564,14 @@ export default function Home() {
       // Inizia sempre con 0% per mostrare la progress bar
       onProgress(file, 0)
       
-      // Simula progress graduale per rendere visibile l'animazione
+      // Simula progress graduale per rendere visibile l'animazione (più lento)
       let simulatedProgress = 0
       const progressInterval = setInterval(() => {
-        if (simulatedProgress < 90) {
-          simulatedProgress += Math.random() * 15 + 5 // Incremento casuale tra 5-20%
-          onProgress(file, Math.min(simulatedProgress, 90))
+        if (simulatedProgress < 80) {
+          simulatedProgress += Math.random() * 10 + 3 // Incremento casuale tra 3-13%
+          onProgress(file, Math.min(simulatedProgress, 80))
         }
-      }, 100) // Aggiorna ogni 100ms
+      }, 200) // Aggiorna ogni 200ms (più lento)
 
       xhr.upload.onprogress = (event) => {
         if (event.lengthComputable) {
@@ -591,14 +591,14 @@ export default function Home() {
           try {
             const data = JSON.parse(xhr.responseText)
             if (data.success) {
-              // Animazione finale da 90% a 100%
-              for (let progress = Math.max(simulatedProgress, 90); progress <= 100; progress += 2) {
+              // Animazione finale da 80% a 100% (più lenta)
+              for (let progress = Math.max(simulatedProgress, 80); progress <= 100; progress += 1) {
                 onProgress(file, progress)
-                await new Promise(resolve => setTimeout(resolve, 50))
+                await new Promise(resolve => setTimeout(resolve, 30))
               }
               
-              // Mantieni il 100% visibile per un momento
-              await new Promise(resolve => setTimeout(resolve, 300))
+              // Mantieni il 100% visibile per un momento più lungo
+              await new Promise(resolve => setTimeout(resolve, 500))
               
               setFormData(prev => ({
                 ...prev,

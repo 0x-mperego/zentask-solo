@@ -4,12 +4,6 @@ import { Button } from "@/components/ui/button";
 import {
   FileUpload,
   FileUploadDropzone,
-  FileUploadItem,
-  FileUploadItemDelete,
-  FileUploadItemMetadata,
-  FileUploadItemPreview,
-  FileUploadItemProgress,
-  FileUploadList,
   type FileUploadProps,
   FileUploadTrigger,
 } from "@/components/ui/file-upload";
@@ -54,6 +48,8 @@ export function FileUploadSheet({
   existingFiles = [],
   onRemoveExisting,
 }: FileUploadSheetProps) {
+  const [uploadingFiles, setUploadingFiles] = React.useState<Map<File, number>>(new Map());
+
   const defaultOnUpload: NonNullable<FileUploadProps["onUpload"]> = React.useCallback(
     async (files, { onProgress, onSuccess, onError }) => {
       try {
@@ -107,6 +103,26 @@ export function FileUploadSheet({
     if (url && typeof url === 'string') {
       window.open(url, '_blank', 'noopener,noreferrer');
     }
+  };
+
+  const getFilePreview = (file: File) => {
+    if (file.type.startsWith('image/')) {
+      const url = URL.createObjectURL(file);
+      return (
+        <img 
+          src={url} 
+          alt={file.name}
+          className="w-full h-full object-cover"
+          onLoad={() => URL.revokeObjectURL(url)}
+        />
+      );
+    }
+    return <Paperclip className="size-4 text-muted-foreground" />;
+  };
+
+  const handleRemoveFile = (file: File) => {
+    const newFiles = files.filter(f => f !== file);
+    onFilesChange(newFiles);
   };
 
   const hasFiles = (existingFiles && existingFiles.length > 0) || files.length > 0;
@@ -199,30 +215,51 @@ export function FileUploadSheet({
               </div>
             ))}
             
-            {/* File in upload */}
-            {files.map((file, index) => (
-              <FileUploadItem 
-                key={`uploading-${index}`} 
-                value={file} 
-                className="flex-col gap-2 p-2 border rounded-lg"
-              >
-                <div className="flex w-full items-center gap-2">
-                  <FileUploadItemPreview className="shrink-0 w-10 h-10" />
-                  <FileUploadItemMetadata size="sm" className="min-w-0 flex-1" />
-                  <FileUploadItemDelete asChild>
+            {/* File in upload - ora con UI custom */}
+            {files.map((file, index) => {
+              const progress = uploadingFiles.get(file) || 0;
+              
+              return (
+                <div
+                  key={`uploading-${index}`}
+                  className="flex-col gap-2 p-2 border rounded-lg"
+                >
+                  <div className="flex w-full items-center gap-2">
+                    <div className="flex items-center justify-center w-10 h-10 rounded border bg-muted overflow-hidden">
+                      {getFilePreview(file)}
+                    </div>
+                    <div className="flex min-w-0 flex-1 flex-col">
+                      <p className="truncate font-normal text-[13px] leading-snug">{file.name}</p>
+                      <p className="truncate text-muted-foreground text-[11px] leading-snug">
+                        {formatBytes(file.size)}
+                      </p>
+                    </div>
                     <Button 
+                      type="button"
                       variant="ghost" 
                       size="icon" 
                       className="size-6 shrink-0"
                       disabled={disabled}
+                      onClick={() => handleRemoveFile(file)}
                     >
                       <X className="size-3" />
                     </Button>
-                  </FileUploadItemDelete>
+                  </div>
+                  
+                  {/* Progress bar custom */}
+                  {progress > 0 && progress < 100 && (
+                    <div className="relative h-1.5 w-full overflow-hidden rounded-full bg-primary/20 mt-2">
+                      <div
+                        className="h-full bg-primary transition-transform duration-300 ease-linear"
+                        style={{
+                          transform: `translateX(-${100 - progress}%)`,
+                        }}
+                      />
+                    </div>
+                  )}
                 </div>
-                <FileUploadItemProgress className="w-full" forceMount={true} />
-              </FileUploadItem>
-            ))}
+              );
+            })}
           </div>
         )}
       </FileUpload>
