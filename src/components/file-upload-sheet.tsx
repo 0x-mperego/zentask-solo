@@ -45,35 +45,23 @@ export function FileUploadSheet({
   const defaultOnUpload: NonNullable<FileUploadProps["onUpload"]> = React.useCallback(
     async (files, { onProgress, onSuccess, onError }) => {
       try {
-        // Process each file individually with a delay between files
+        // Process each file individually 
         for (const file of files) {
           try {
-            // Initialize progress to 0
+            // Start with 0 progress
             onProgress(file, 0);
             
-            // Simulate file upload with progress
-            const totalChunks = 20;
-
-            // Simulate chunk upload with delays
-            for (let i = 1; i <= totalChunks; i++) {
-              // Simulate network delay (50-150ms per chunk)
-              await new Promise((resolve) =>
-                setTimeout(resolve, Math.random() * 100 + 50),
-              );
-
-              // Update progress for this specific file
-              const progress = Math.min((i / totalChunks) * 100, 99);
-              onProgress(file, progress);
+            // Simulate upload with smooth progress
+            for (let progress = 0; progress <= 100; progress += 5) {
+              // Small delay for each progress step
+              await new Promise((resolve) => setTimeout(resolve, 80));
+              onProgress(file, Math.min(progress, 100));
             }
 
-            // Final processing
+            // Small delay before marking as complete
             await new Promise((resolve) => setTimeout(resolve, 200));
             
-            // Complete the upload
-            onProgress(file, 100);
-            await new Promise((resolve) => setTimeout(resolve, 100));
-            
-            // Mark as complete
+            // Mark as successfully uploaded
             onSuccess(file);
           } catch (error) {
             onError(
