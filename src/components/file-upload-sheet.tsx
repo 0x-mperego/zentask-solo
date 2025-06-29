@@ -104,7 +104,9 @@ export function FileUploadSheet({
   };
 
   const handleFileClick = (url: string) => {
-    window.open(url, '_blank', 'noopener,noreferrer');
+    if (url && typeof url === 'string') {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
   };
 
   return (
@@ -122,15 +124,15 @@ export function FileUploadSheet({
         multiple
       >
         <FileUploadDropzone>
-          <div className="flex flex-col items-center gap-2 text-center p-3 min-h-[80px] justify-center">
-            <div className="flex items-center justify-center rounded-full border border-dashed p-2">
-              <Upload className="size-4 text-muted-foreground" />
+          <div className="flex flex-col items-center gap-1 text-center p-2 min-h-[60px] justify-center">
+            <div className="flex items-center justify-center rounded-full border border-dashed p-1.5">
+              <Upload className="size-3 text-muted-foreground" />
             </div>
             <div>
-              <p className="font-medium text-sm">{label}</p>
+              <p className="font-medium text-xs">{label}</p>
               {maxSize && (
                 <p className="text-muted-foreground text-xs">
-                  Massimo {Math.round(maxSize / (1024 * 1024))}MB
+                  Max {Math.round(maxSize / (1024 * 1024))}MB
                 </p>
               )}
             </div>
@@ -138,29 +140,29 @@ export function FileUploadSheet({
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="h-7 text-xs"
+                className="h-6 text-xs px-2"
                 disabled={disabled}
               >
-                Sfoglia file
+                Sfoglia
               </Button>
             </FileUploadTrigger>
           </div>
         </FileUploadDropzone>
         
         {/* Allegati esistenti */}
-        {existingFiles.length > 0 && (
+        {existingFiles && existingFiles.length > 0 && (
           <div className="mt-3 space-y-2">
-            {existingFiles.map((allegato, index) => (
+            {existingFiles.filter(allegato => allegato && allegato.name && allegato.url).map((allegato, index) => (
               <div
-                key={index}
+                key={`existing-${index}`}
                 className="flex items-center gap-2 p-2 border rounded-lg hover:bg-muted/50 cursor-pointer transition-colors"
-                onClick={() => handleFileClick(allegato.url)}
+                onClick={() => allegato.url && handleFileClick(allegato.url)}
               >
                 <div className="flex items-center justify-center w-10 h-10 rounded border bg-muted overflow-hidden">
-                  {allegato.type.startsWith('image/') ? (
+                  {allegato.type && allegato.type.startsWith('image/') ? (
                     <img 
                       src={allegato.url} 
-                      alt={allegato.name}
+                      alt={allegato.name || 'File'}
                       className="w-full h-full object-cover"
                     />
                   ) : (
@@ -169,11 +171,11 @@ export function FileUploadSheet({
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <p className="text-sm font-medium truncate">{allegato.name}</p>
+                    <p className="text-sm font-medium truncate">{allegato.name || 'File senza nome'}</p>
                     <ExternalLink className="size-3 text-muted-foreground" />
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    {formatFileSize(allegato.size)}
+                    {formatFileSize(allegato.size || 0)}
                   </p>
                 </div>
                 {onRemoveExisting && (

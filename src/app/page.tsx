@@ -992,7 +992,7 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <FormField label="Date Intervento" htmlFor="dateRange" required description="Data fine opzionale (se non specificata, sarà uguale alla data inizio)">
+          <FormField label="Date Intervento" htmlFor="dateRange" required>
             <DateRangePicker
               value={formData.dateRange}
               onChange={(range) =>
