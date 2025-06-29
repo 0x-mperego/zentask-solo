@@ -28,7 +28,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Combobox } from "@/components/ui/combobox"
 import { TimeInput } from "@/components/ui/time-input"
 import { DateRangePicker } from "@/components/ui/date-range-picker"
-import { Dropzone } from "@/components/ui/dropzone"
+import { FileUploadFormField } from "@/components/file-upload-form-field"
 import { DateRange } from "react-day-picker"
 import { 
   IconCircleCheckFilled, 
@@ -962,22 +962,19 @@ export default function Home() {
           />
         </FormField>
 
-        <FormField label="Allegati" htmlFor="allegati">
-          <Dropzone
-            onFilesChange={(files) =>
-              setFormData({ ...formData, allegati: files })
-            }
-            maxFiles={5}
-            maxSize={10 * 1024 * 1024} // 10MB
-            accept={{
-              'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.webp'],
-              'application/pdf': ['.pdf'],
-              'application/msword': ['.doc'],
-              'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
-              'text/plain': ['.txt'],
-            }}
-          />
-        </FormField>
+        <FileUploadFormField
+          label="Allegati"
+          description="Carica i documenti relativi all'intervento (max 5 file, 10MB ciascuno)"
+          files={formData.allegati}
+          onFilesChange={(files: File[]) =>
+            setFormData({ ...formData, allegati: files })
+          }
+          maxFiles={5}
+          maxSize={10 * 1024 * 1024} // 10MB
+          accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp,.txt"
+          uploadLabel="Carica documenti"
+          uploadDescription="PDF, DOC, IMG, TXT fino a 10MB"
+        />
       </StandardFormSheet>
 
       {/* FAB for mobile */}
