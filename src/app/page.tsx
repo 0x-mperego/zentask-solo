@@ -898,7 +898,7 @@ export default function Home() {
         onCancel={() => setIsSheetOpen(false)}
         submitText={editingItem ? "Salva Modifiche" : "Crea Intervento"}
         headerExtra={editingItem ? (
-          <div className="text-right">
+          <div>
             <div className="text-xs text-muted-foreground">ID Intervento</div>
             <div className="font-mono text-sm font-medium">{editingItem.codice}</div>
           </div>

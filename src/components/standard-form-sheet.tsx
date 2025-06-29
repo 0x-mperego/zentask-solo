@@ -56,11 +56,11 @@ export function StandardFormSheet({
       side={sheetSide} 
       className={sheetSide === "right" || sheetSide === "left" ? "w-full max-w-md sm:max-w-lg" : ""}
     >
-      <SheetHeader className="gap-1">
+      <SheetHeader className="text-left">
         <SheetTitle>{title}</SheetTitle>
         <SheetDescription>{description}</SheetDescription>
         {headerExtra && (
-          <div className="mt-3 pt-2 border-t">
+          <div className="pt-4">
             {headerExtra}
           </div>
         )}
