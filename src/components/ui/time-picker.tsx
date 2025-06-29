@@ -3,7 +3,6 @@
 import * as React from "react"
 import { TimePickerInput } from "./time-picker-input"
 import { Label } from "./label"
-import { Clock } from "lucide-react"
 
 interface TimePickerProps {
   value?: string;
@@ -67,9 +66,6 @@ export function TimePicker({ value, onChange }: TimePickerProps) {
           ref={minuteRef}
           onLeftFocus={() => hourRef.current?.focus()}
         />
-      </div>
-      <div className="flex h-10 items-center">
-        <Clock className="ml-2 h-4 w-4 text-muted-foreground" />
       </div>
     </div>
   )

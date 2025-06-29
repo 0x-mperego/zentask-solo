@@ -111,7 +111,7 @@ export const TimePickerInput = React.forwardRef<
       id={picker}
       name={picker}
       className={cn(
-        "w-12 text-center text-lg font-semibold tabular-nums caret-transparent focus:bg-accent focus:text-accent-foreground [&::-webkit-inner-spin-button]:appearance-none",
+        "w-16 text-center text-lg font-semibold tabular-nums caret-transparent focus:bg-accent focus:text-accent-foreground [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [appearance:textfield]",
         className,
         flag && "text-accent-foreground",
       )}

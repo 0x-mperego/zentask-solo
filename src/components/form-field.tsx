@@ -17,7 +17,7 @@ export function FormField({
   required 
 }: FormFieldProps) {
   return (
-    <div className="flex flex-col gap-3 min-w-0">
+    <div className="flex flex-col gap-3 min-w-0 justify-end">
       <Label htmlFor={htmlFor} className="break-words">
         {label}
         {required && <span className="text-destructive ml-1">*</span>}
