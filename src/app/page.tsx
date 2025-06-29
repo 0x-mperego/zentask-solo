@@ -119,7 +119,7 @@ const generateCodiceIntervento = (id: number): string => {
 const formatDate = (dateString: string): string => {
   if (!dateString) return ''
   const date = new Date(dateString)
-  return date.toLocaleDateString('it-IT')
+  return date.toLocaleDateString('it-IT', { day: 'numeric', month: 'short', year: 'numeric' })
 }
 
 const getInitials = (nome: string, cognome: string): string => {
@@ -355,7 +355,7 @@ const createInterventiColumns = (
   },
   {
     id: "actions",
-    header: "Azioni",
+    header: "",
     cell: ({ row }) => {
       const intervento = row.original
       return (

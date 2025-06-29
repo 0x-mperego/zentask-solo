@@ -35,6 +35,7 @@ export function DurationPicker({
 
   const handleHoursChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let val = e.target.value.replace(/\D/g, "")
+    if (val.length > 2) val = val.slice(0, 2)
     setHours(val)
     updateValue(val, minutes)
   }
@@ -69,6 +70,7 @@ export function DurationPicker({
           onChange={handleHoursChange}
           placeholder="0"
           className={commonInputClassName}
+          maxLength={2}
           disabled={disabled}
         />
        </div>
