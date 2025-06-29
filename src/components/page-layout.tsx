@@ -19,7 +19,6 @@ import {
 import { PageHeader } from "@/components/page-header"
 import { ContentWrapper } from "@/components/content-wrapper"
 import { useAuth } from "@/contexts/AuthContext"
-import { ThemeToggle } from "@/components/theme-toggle"
 
 interface PageLayoutProps {
   children: React.ReactNode
@@ -93,11 +92,36 @@ export function PageLayout({
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center justify-end gap-2 px-4 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-          <ThemeToggle />
+        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+          <div className="flex items-center gap-2 px-4 lg:px-6">
+            <SidebarTrigger className="-ml-1" />
+            <Separator
+              orientation="vertical"
+              className="mr-2 data-[orientation=vertical]:h-4"
+            />
+            {finalBreadcrumbItems.length > 0 && (
+              <Breadcrumb>
+                <BreadcrumbList>
+                  {finalBreadcrumbItems.map((item, index) => (
+                    <React.Fragment key={index}>
+                      {index > 0 && <BreadcrumbSeparator className="hidden md:block" />}
+                      <BreadcrumbItem className={index === 0 ? "hidden md:block" : ""}>
+                        {item.isCurrentPage || !item.href ? (
+                          <BreadcrumbPage>{item.label}</BreadcrumbPage>
+                        ) : (
+                          <BreadcrumbLink href={item.href}>
+                            {item.label}
+                          </BreadcrumbLink>
+                        )}
+                      </BreadcrumbItem>
+                    </React.Fragment>
+                  ))}
+                </BreadcrumbList>
+              </Breadcrumb>
+            )}
+          </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <SidebarTrigger className="-ml-2 mb-2" />
           {isManagementMode ? (
             <>
               <PageHeader title={title} description={description} actionButton={customActionButton} />
