@@ -53,6 +53,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { type FileUploadProps } from "@/components/ui/file-upload"
 
 // Interfacce per le entità correlate
 interface Stato {
@@ -85,6 +86,14 @@ interface Utente {
   password: string
 }
 
+// Interfaccia per gli allegati
+interface Allegato {
+  name: string
+  url: string
+  size: number
+  type: string
+}
+
 // Interfaccia principale per gli interventi
 interface Intervento {
   id: number
@@ -99,7 +108,7 @@ interface Intervento {
   dataFine: string // formato YYYY-MM-DD
   durata: string // formato HH:MM
   note: string
-  allegati: File[] // Array di file
+  allegati: Allegato[] // Array di allegati
   createdAt: string
 }
 
@@ -408,6 +417,7 @@ export default function Home() {
     durata: "",
     note: "",
     allegati: [] as File[],
+    uploadedAllegati: [] as Allegato[],
   })
 
   const { isLoading, isAuthenticated, user } = useAuth()
@@ -522,7 +532,8 @@ export default function Home() {
       dateRange: dateRange,
       durata: item.durata,
       note: item.note,
-      allegati: item.allegati || [],
+      allegati: [], // i file esistenti sono in uploadedAllegati, questo è per i nuovi
+      uploadedAllegati: item.allegati || [],
     })
     setIsSheetOpen(true)
   }
@@ -536,6 +547,57 @@ export default function Home() {
       }
       return { ...prev, [key]: value }
     })
+  }
+
+  // Gestione upload
+  const handleUpload: FileUploadProps["onUpload"] = async (
+    files,
+    { onProgress, onSuccess, onError }
+  ) => {
+    for (const file of files) {
+      const formData = new FormData()
+      formData.append("file", file)
+
+      const xhr = new XMLHttpRequest()
+      xhr.open("POST", "/api/upload")
+
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const percentComplete = Math.round((event.loaded / event.total) * 100)
+          onProgress(file, percentComplete)
+        }
+      }
+
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          try {
+            const data = JSON.parse(xhr.responseText)
+            if (data.success) {
+              setFormData(prev => ({
+                ...prev,
+                uploadedAllegati: [
+                  ...prev.uploadedAllegati,
+                  { name: file.name, url: data.url, size: file.size, type: file.type }
+                ]
+              }))
+              onSuccess(file)
+            } else {
+              throw new Error(data.error || 'Upload failed.')
+            }
+          } catch (e) {
+            onError(file, e instanceof Error ? e : new Error("Failed to parse server response."))
+          }
+        } else {
+          onError(file, new Error(`Upload failed with status ${xhr.status}`))
+        }
+      }
+
+      xhr.onerror = () => {
+        onError(file, new Error("An error occurred during the upload."))
+      }
+
+      xhr.send(formData)
+    }
   }
 
   // Gestione eliminazione
@@ -639,6 +701,13 @@ export default function Home() {
     }
 
     try {
+      const finalAllegati = [
+        ...(editingItem?.allegati || []),
+        ...formData.uploadedAllegati
+      ].filter((allegato, index, self) =>
+        index === self.findIndex((a) => a.url === allegato.url)
+      )
+
       if (editingItem) {
         // Modifica intervento esistente
         const updatedInterventi = interventi.map(item =>
@@ -655,7 +724,7 @@ export default function Home() {
                 dataFine: formData.dateRange?.to?.toISOString().split('T')[0] || formData.dateRange?.from?.toISOString().split('T')[0] || '',
                 durata: formData.durata,
                 note: formData.note,
-                allegati: formData.allegati,
+                allegati: finalAllegati,
               }
             : item
         )
@@ -679,7 +748,7 @@ export default function Home() {
           dataFine: formData.dateRange?.to?.toISOString().split('T')[0] || formData.dateRange?.from?.toISOString().split('T')[0] || '',
           durata: formData.durata,
           note: formData.note,
-          allegati: formData.allegati,
+          allegati: finalAllegati,
           createdAt: new Date().toISOString(),
         }
 
@@ -701,6 +770,7 @@ export default function Home() {
         durata: "",
         note: "",
         allegati: [],
+        uploadedAllegati: [],
       })
       setIsSheetOpen(false)
       setEditingItem(null)
@@ -731,6 +801,7 @@ export default function Home() {
       durata: "",
       note: "",
       allegati: [],
+      uploadedAllegati: [],
     })
     setIsSheetOpen(true)
   }
@@ -959,13 +1030,46 @@ export default function Home() {
           />
         </FormField>
 
+        {formData.uploadedAllegati.length > 0 && (
+          <div>
+            <Label>Allegati caricati</Label>
+            <ul className="mt-2 space-y-2">
+              {formData.uploadedAllegati.map((allegato, index) => (
+                <li key={index} className="flex items-center justify-between text-sm p-2 border rounded-md">
+                  <div className="flex items-center gap-2">
+                    <IconPaperclip className="h-4 w-4" />
+                    <a href={allegato.url} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                      {allegato.name}
+                    </a>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6"
+                    onClick={() => {
+                      setFormData(prev => ({
+                        ...prev,
+                        uploadedAllegati: prev.uploadedAllegati.filter((_, i) => i !== index)
+                      }))
+                    }}
+                  >
+                    <IconTrash className="h-4 w-4 text-destructive" />
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         <FileUploadFormField
-          label="Allegati"
+          label="Aggiungi nuovi allegati"
           files={formData.allegati}
           onFilesChange={(files: File[]) =>
               setFormData({ ...formData, allegati: files })
             }
-            maxSize={10 * 1024 * 1024} // 10MB
+          onUpload={handleUpload}
+          maxSize={10 * 1024 * 1024} // 10MB
           accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp,.txt,.zip,.rar"
           uploadLabel="Carica documenti"
           uploadDescription="Trascina i file qui o clicca per sfogliare"
