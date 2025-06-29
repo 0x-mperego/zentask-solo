@@ -95,12 +95,12 @@ export function FileUploadSheet({
     });
   }, []);
 
-  const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  // Usa la stessa formattazione del componente FileUpload
+  const formatBytes = (bytes: number) => {
+    if (bytes === 0) return "0 B";
+    const sizes = ["B", "KB", "MB", "GB", "TB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    return `${(bytes / 1024 ** i).toFixed(i ? 1 : 0)} ${sizes[i]}`;
   };
 
   const handleFileClick = (url: string) => {
@@ -172,13 +172,13 @@ export function FileUploadSheet({
                     <Paperclip className="size-4 text-muted-foreground" />
                   )}
                 </div>
-                <div className="flex-1 min-w-0">
+                <div className="flex min-w-0 flex-1 flex-col">
                   <div className="flex items-center gap-2">
-                    <p className="text-sm font-medium truncate">{allegato.name || 'File senza nome'}</p>
+                    <p className="truncate font-normal text-[13px] leading-snug">{allegato.name || 'File senza nome'}</p>
                     <ExternalLink className="size-3 text-muted-foreground" />
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    {formatFileSize(allegato.size || 0)}
+                  <p className="truncate text-muted-foreground text-[11px] leading-snug">
+                    {formatBytes(allegato.size || 0)}
                   </p>
                 </div>
                 {onRemoveExisting && (
