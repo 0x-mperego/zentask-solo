@@ -34,7 +34,7 @@ export function FileUploadSheet({
   files,
   onFilesChange,
   onUpload,
-  maxFiles = 5,
+  maxFiles,
   accept,
   maxSize,
   label = "Carica file",
@@ -45,29 +45,33 @@ export function FileUploadSheet({
   const defaultOnUpload: NonNullable<FileUploadProps["onUpload"]> = React.useCallback(
     async (files, { onProgress, onSuccess, onError }) => {
       try {
-        // Process each file individually
-        const uploadPromises = files.map(async (file) => {
+        // Process each file individually with a delay between files
+        for (const file of files) {
           try {
             // Initialize progress to 0
             onProgress(file, 0);
             
             // Simulate file upload with progress
-            const totalChunks = 10;
+            const totalChunks = 20;
 
             // Simulate chunk upload with delays
             for (let i = 1; i <= totalChunks; i++) {
-              // Simulate network delay (100-300ms per chunk)
+              // Simulate network delay (50-150ms per chunk)
               await new Promise((resolve) =>
-                setTimeout(resolve, Math.random() * 200 + 100),
+                setTimeout(resolve, Math.random() * 100 + 50),
               );
 
               // Update progress for this specific file
-              const progress = (i / totalChunks) * 100;
+              const progress = Math.min((i / totalChunks) * 100, 99);
               onProgress(file, progress);
             }
 
-            // Simulate final server processing delay
+            // Final processing
             await new Promise((resolve) => setTimeout(resolve, 200));
+            
+            // Complete the upload
+            onProgress(file, 100);
+            await new Promise((resolve) => setTimeout(resolve, 100));
             
             // Mark as complete
             onSuccess(file);
@@ -77,10 +81,7 @@ export function FileUploadSheet({
               error instanceof Error ? error : new Error("Upload failed"),
             );
           }
-        });
-
-        // Wait for all uploads to complete
-        await Promise.all(uploadPromises);
+        }
       } catch (error) {
         console.error("Unexpected error during upload:", error);
       }
@@ -118,9 +119,9 @@ export function FileUploadSheet({
               <p className="text-muted-foreground text-xs mt-1">
                 {description}
               </p>
-              {maxFiles > 1 && (
+              {maxSize && (
                 <p className="text-muted-foreground text-xs">
-                  (max {maxFiles} file)
+                  (max {Math.round(maxSize / (1024 * 1024))}MB per file)
                 </p>
               )}
             </div>

@@ -965,11 +965,10 @@ export default function Home() {
           onFilesChange={(files: File[]) =>
             setFormData({ ...formData, allegati: files })
           }
-          maxFiles={5}
           maxSize={10 * 1024 * 1024} // 10MB
-          accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp,.txt"
+          accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp,.txt,.zip,.rar"
           uploadLabel="Carica documenti"
-          uploadDescription="PDF, DOC, IMG, TXT fino a 10MB"
+          uploadDescription="File comuni fino a 10MB"
         />
       </StandardFormSheet>
 
