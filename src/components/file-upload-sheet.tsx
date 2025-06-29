@@ -220,28 +220,18 @@ export function FileUploadSheet({
         multiple
       >
         <FileUploadDropzone>
-          <div className="flex flex-col items-center gap-1 text-center p-2 min-h-[60px] justify-center">
+          <div className="flex flex-col items-center gap-1 text-center p-2 min-h-[60px] justify-center hover:bg-muted/50 transition-colors cursor-pointer">
             <div className="flex items-center justify-center rounded-full border border-dashed p-1.5">
               <Upload className="size-3 text-muted-foreground" />
             </div>
             <div>
-              <p className="font-medium text-xs">{label}</p>
+              <p className="font-medium text-xs text-muted-foreground">{label}</p>
               {maxSize && (
                 <p className="text-muted-foreground text-xs">
                   Max {Math.round(maxSize / (1024 * 1024))}MB
                 </p>
               )}
             </div>
-            <FileUploadTrigger asChild>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="h-6 text-xs px-2"
-                disabled={disabled}
-              >
-                Sfoglia
-              </Button>
-            </FileUploadTrigger>
           </div>
         </FileUploadDropzone>
         

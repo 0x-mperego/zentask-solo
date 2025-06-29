@@ -897,6 +897,12 @@ export default function Home() {
         onSubmit={handleSubmit}
         onCancel={() => setIsSheetOpen(false)}
         submitText={editingItem ? "Salva Modifiche" : "Crea Intervento"}
+        headerExtra={editingItem ? (
+          <div className="text-right">
+            <div className="text-xs text-muted-foreground">ID Intervento</div>
+            <div className="font-mono text-sm font-medium">{editingItem.codice}</div>
+          </div>
+        ) : undefined}
       >
         <FormField label="Descrizione" htmlFor="descrizione" required>
           <Input
@@ -967,7 +973,7 @@ export default function Home() {
                   <SelectItem key={stato.id} value={stato.id.toString()}>
                     <div className="flex items-center gap-2">
                       <div
-                        className="w-2 h-2 rounded-full"
+                        className="w-3 h-3 rounded-full"
                         style={{ backgroundColor: stato.colore }}
                       />
                       {stato.nome}
@@ -1016,7 +1022,7 @@ export default function Home() {
             }
           />
           <Label htmlFor="urgente" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-            Urgenza
+            Urgente
           </Label>
         </div>
 

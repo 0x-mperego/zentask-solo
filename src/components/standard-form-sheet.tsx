@@ -24,6 +24,7 @@ interface StandardFormSheetProps {
   trigger?: ReactNode
   side?: "top" | "bottom" | "left" | "right"
   forceSide?: boolean
+  headerExtra?: ReactNode
 }
 
 export function StandardFormSheet({
@@ -39,6 +40,7 @@ export function StandardFormSheet({
   trigger,
   side = "right",
   forceSide = false,
+  headerExtra,
 }: StandardFormSheetProps) {
   const isMobile = useIsMobile()
   
@@ -55,8 +57,17 @@ export function StandardFormSheet({
       className={sheetSide === "right" || sheetSide === "left" ? "w-full max-w-md sm:max-w-lg" : ""}
     >
       <SheetHeader className="gap-1">
-        <SheetTitle>{title}</SheetTitle>
-        <SheetDescription>{description}</SheetDescription>
+        <div className="flex items-start justify-between">
+          <div className="flex-1">
+            <SheetTitle>{title}</SheetTitle>
+            <SheetDescription>{description}</SheetDescription>
+          </div>
+          {headerExtra && (
+            <div className="ml-4 flex-shrink-0">
+              {headerExtra}
+            </div>
+          )}
+        </div>
       </SheetHeader>
       
       <form 
