@@ -51,11 +51,11 @@ export function FileUploadSheet({
             // Start with 0 progress
             onProgress(file, 0);
             
-            // Simulate upload with smooth progress
-            for (let progress = 0; progress <= 100; progress += 5) {
-              // Small delay for each progress step
-              await new Promise((resolve) => setTimeout(resolve, 80));
-              onProgress(file, Math.min(progress, 100));
+            // Simulate upload with smooth progress (20 steps of 5% in 600ms total)
+            for (let progress = 5; progress <= 100; progress += 5) {
+              // 30ms per step (600ms / 20 steps)
+              await new Promise((resolve) => setTimeout(resolve, 30));
+              onProgress(file, progress);
             }
 
             // Small delay before marking as complete

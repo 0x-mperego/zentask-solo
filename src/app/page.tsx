@@ -963,9 +963,9 @@ export default function Home() {
           label="Allegati"
           files={formData.allegati}
           onFilesChange={(files: File[]) =>
-            setFormData({ ...formData, allegati: files })
-          }
-          maxSize={10 * 1024 * 1024} // 10MB
+              setFormData({ ...formData, allegati: files })
+            }
+            maxSize={10 * 1024 * 1024} // 10MB
           accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp,.txt,.zip,.rar"
           uploadLabel="Carica documenti"
           uploadDescription="Trascina i file qui o clicca per sfogliare"
