@@ -50,6 +50,78 @@ export function FileUploadSheet({
 }: FileUploadSheetProps) {
   const [uploadingFiles, setUploadingFiles] = React.useState<Map<File, number>>(new Map());
 
+  // Wrapper per onUpload che traccia il progresso
+  const handleUpload: FileUploadProps["onUpload"] = React.useCallback(
+    async (files, { onProgress, onSuccess, onError }) => {
+      // Inizializza tutti i file a 0%
+      setUploadingFiles(prev => {
+        const newMap = new Map(prev);
+        files.forEach(file => newMap.set(file, 0));
+        return newMap;
+      });
+
+      const wrappedOnProgress = (file: File, progress: number) => {
+        setUploadingFiles(prev => {
+          const newMap = new Map(prev);
+          newMap.set(file, progress);
+          return newMap;
+        });
+        onProgress(file, progress);
+      };
+
+      const wrappedOnSuccess = (file: File) => {
+        setUploadingFiles(prev => {
+          const newMap = new Map(prev);
+          newMap.delete(file);
+          return newMap;
+        });
+        onSuccess(file);
+      };
+
+      const wrappedOnError = (file: File, error: Error) => {
+        setUploadingFiles(prev => {
+          const newMap = new Map(prev);
+          newMap.delete(file);
+          return newMap;
+        });
+        onError(file, error);
+      };
+
+      if (onUpload) {
+        await onUpload(files, {
+          onProgress: wrappedOnProgress,
+          onSuccess: wrappedOnSuccess,
+          onError: wrappedOnError,
+        });
+      } else {
+        // Fallback al default upload
+        try {
+          for (const file of files) {
+            try {
+              wrappedOnProgress(file, 0);
+              
+              for (let progress = 5; progress <= 100; progress += 5) {
+                await new Promise((resolve) => setTimeout(resolve, 30));
+                wrappedOnProgress(file, progress);
+              }
+
+              await new Promise((resolve) => setTimeout(resolve, 200));
+              wrappedOnSuccess(file);
+            } catch (error) {
+              wrappedOnError(
+                file,
+                error instanceof Error ? error : new Error("Upload failed"),
+              );
+            }
+          }
+        } catch (error) {
+          console.error("Unexpected error during upload:", error);
+        }
+      }
+    },
+    [onUpload],
+  );
+
   const defaultOnUpload: NonNullable<FileUploadProps["onUpload"]> = React.useCallback(
     async (files, { onProgress, onSuccess, onError }) => {
       try {
@@ -123,6 +195,12 @@ export function FileUploadSheet({
   const handleRemoveFile = (file: File) => {
     const newFiles = files.filter(f => f !== file);
     onFilesChange(newFiles);
+    // Rimuovi anche dal tracking del progresso
+    setUploadingFiles(prev => {
+      const newMap = new Map(prev);
+      newMap.delete(file);
+      return newMap;
+    });
   };
 
   const hasFiles = (existingFiles && existingFiles.length > 0) || files.length > 0;
@@ -132,7 +210,7 @@ export function FileUploadSheet({
       <FileUpload
         value={files}
         onValueChange={onFilesChange}
-        onUpload={onUpload || defaultOnUpload}
+        onUpload={handleUpload}
         onFileReject={onFileReject}
         maxFiles={maxFiles}
         accept={accept}
@@ -218,11 +296,12 @@ export function FileUploadSheet({
             {/* File in upload - ora con UI custom */}
             {files.map((file, index) => {
               const progress = uploadingFiles.get(file) || 0;
+              const isUploading = uploadingFiles.has(file);
               
               return (
                 <div
                   key={`uploading-${index}`}
-                  className="flex-col gap-2 p-2 border rounded-lg"
+                  className="flex flex-col gap-2 p-2 border rounded-lg"
                 >
                   <div className="flex w-full items-center gap-2">
                     <div className="flex items-center justify-center w-10 h-10 rounded border bg-muted overflow-hidden">
@@ -231,7 +310,7 @@ export function FileUploadSheet({
                     <div className="flex min-w-0 flex-1 flex-col">
                       <p className="truncate font-normal text-[13px] leading-snug">{file.name}</p>
                       <p className="truncate text-muted-foreground text-[11px] leading-snug">
-                        {formatBytes(file.size)}
+                        {formatBytes(file.size)} {isUploading && `• ${progress}%`}
                       </p>
                     </div>
                     <Button 
@@ -247,8 +326,8 @@ export function FileUploadSheet({
                   </div>
                   
                   {/* Progress bar custom */}
-                  {progress > 0 && progress < 100 && (
-                    <div className="relative h-1.5 w-full overflow-hidden rounded-full bg-primary/20 mt-2">
+                  {isUploading && (
+                    <div className="relative h-1.5 w-full overflow-hidden rounded-full bg-primary/20">
                       <div
                         className="h-full bg-primary transition-transform duration-300 ease-linear"
                         style={{
