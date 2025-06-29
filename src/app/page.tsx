@@ -898,63 +898,61 @@ export default function Home() {
         onCancel={() => setIsSheetOpen(false)}
         submitText={editingItem ? "Salva Modifiche" : "Crea Intervento"}
       >
-        <div className="space-y-4">
+        <div className="space-y-5">
+          <FormField label="Descrizione" htmlFor="descrizione" required>
+            <Input
+              id="descrizione"
+              value={formData.descrizione}
+              onChange={(e) =>
+                setFormData({ ...formData, descrizione: e.target.value })
+              }
+              placeholder="Breve descrizione dell'intervento"
+              required
+            />
+          </FormField>
 
-          {/* Sezione 1: Dettagli e Stato */}
-          <div className="space-y-4 rounded-lg border bg-background p-4">
-            <FormField label="Descrizione" htmlFor="descrizione" required>
-              <Input
-                id="descrizione"
-                value={formData.descrizione}
-                onChange={(e) =>
-                  setFormData({ ...formData, descrizione: e.target.value })
+          <div className="grid grid-cols-2 gap-4">
+            <FormField label="Attività" htmlFor="attivitaId" required>
+              <Combobox
+                options={attivita.map((att) => ({
+                  value: att.id.toString(),
+                  label: att.nome,
+                }))}
+                value={formData.attivitaId}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, attivitaId: value })
                 }
-                placeholder="Breve descrizione dell'intervento"
-                required
+                placeholder="Seleziona attività"
+                searchPlaceholder="Cerca attività..."
+                emptyText="Nessuna attività trovata"
+                useDrawerOnMobile={true}
+                showCheck={false}
+                className="w-full"
               />
             </FormField>
 
-            <div className="grid grid-cols-2 gap-4">
-              <FormField label="Attività" htmlFor="attivitaId" required>
-                <Combobox
-                  options={attivita.map((att) => ({
-                    value: att.id.toString(),
-                    label: att.nome,
-                  }))}
-                  value={formData.attivitaId}
-                  onValueChange={(value) =>
-                    setFormData({ ...formData, attivitaId: value })
-                  }
-                  placeholder="Seleziona attività"
-                  searchPlaceholder="Cerca attività..."
-                  emptyText="Nessuna attività trovata"
-                  useDrawerOnMobile={true}
-                  showCheck={false}
-                  className="w-full"
-                />
-              </FormField>
+            <FormField label="Cliente" htmlFor="clienteId" required>
+              <Combobox
+                options={clienti.map((cliente) => ({
+                  value: cliente.id.toString(),
+                  label: cliente.nome,
+                }))}
+                value={formData.clienteId}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, clienteId: value })
+                }
+                placeholder="Seleziona cliente"
+                searchPlaceholder="Cerca cliente..."
+                emptyText="Nessun cliente trovato"
+                useDrawerOnMobile={true}
+                showIcon={false}
+                showCheck={false}
+                className="w-full"
+              />
+            </FormField>
+          </div>
 
-              <FormField label="Cliente" htmlFor="clienteId" required>
-                <Combobox
-                  options={clienti.map((cliente) => ({
-                    value: cliente.id.toString(),
-                    label: cliente.nome,
-                  }))}
-                  value={formData.clienteId}
-                  onValueChange={(value) =>
-                    setFormData({ ...formData, clienteId: value })
-                  }
-                  placeholder="Seleziona cliente"
-                  searchPlaceholder="Cerca cliente..."
-                  emptyText="Nessun cliente trovato"
-                  useDrawerOnMobile={true}
-                  showIcon={false}
-                  showCheck={false}
-                  className="w-full"
-                />
-              </FormField>
-            </div>
-
+          <div className="grid grid-cols-2 gap-4">
             <FormField label="Stato" htmlFor="statoId" required>
               <Select
                 value={formData.statoId}
@@ -980,11 +978,8 @@ export default function Home() {
                 </SelectContent>
               </Select>
             </FormField>
-          </div>
-          
-          {/* Sezione 2: Assegnazione, Pianificazione e Urgenza */}
-          <div className="space-y-4 rounded-lg border bg-background p-4">
-             <FormField label="Dipendente" htmlFor="dipendenteId" required>
+
+            <FormField label="Dipendente" htmlFor="dipendenteId" required>
               <Select
                 value={formData.dipendenteId}
                 onValueChange={(value) =>
@@ -1011,84 +1006,80 @@ export default function Home() {
                 </SelectContent>
               </Select>
             </FormField>
+          </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <FormField label="Date Intervento" htmlFor="dateRange" required>
-                <DateRangePicker
-                  value={formData.dateRange}
-                  onChange={(range) =>
-                    setFormData({ ...formData, dateRange: range })
-                  }
-                  placeholder="Seleziona date intervento"
-                />
-              </FormField>
-
-              <FormField label="Durata" htmlFor="durata">
-                <TimeInput
-                  value={formData.durata}
-                  onChange={(value) =>
-                    setFormData({ ...formData, durata: value })
-                  }
-                  placeholder="00:00"
-                />
-              </FormField>
-            </div>
-            
-            <div className="pt-2">
-              <div className="flex items-center justify-between rounded-lg border bg-background p-3">
-                <Label htmlFor="urgente" className="text-sm font-medium flex items-center gap-2">
-                  <span className="text-red-500">
-                    <IconAlertTriangle className="h-4 w-4" />
-                  </span>
-                  Urgente
-                </Label>
-                <Switch
-                  id="urgente"
-                  checked={formData.urgente}
-                  onCheckedChange={(checked) =>
-                    setFormData({ ...formData, urgente: checked as boolean })
-                  }
-                  className="data-[state=checked]:bg-red-500"
-                />
-              </div>
+          <div className="rounded-lg border bg-card p-4">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="urgente" className="text-sm font-medium flex items-center gap-2">
+                <span className="text-red-500">
+                  <IconAlertTriangle className="h-4 w-4" />
+                </span>
+                Urgente
+              </Label>
+              <Switch
+                id="urgente"
+                checked={formData.urgente}
+                onCheckedChange={(checked) =>
+                  setFormData({ ...formData, urgente: checked as boolean })
+                }
+                className="data-[state=checked]:bg-red-500"
+              />
             </div>
           </div>
 
-
-          {/* Sezione 3: Note e Allegati */}
-          <div className="space-y-4">
-            <FormField label="Note" htmlFor="note">
-              <Textarea
-                id="note"
-                value={formData.note}
-                onChange={(e) =>
-                  setFormData({ ...formData, note: e.target.value })
+          <div className="grid grid-cols-2 gap-4">
+            <FormField label="Date Intervento" htmlFor="dateRange" required>
+              <DateRangePicker
+                value={formData.dateRange}
+                onChange={(range) =>
+                  setFormData({ ...formData, dateRange: range })
                 }
-                placeholder="Note aggiuntive, dettagli tecnici o commenti..."
-                rows={3}
+                placeholder="Seleziona date intervento"
               />
             </FormField>
 
-            <FileUploadFormField
-              label="Allegati"
-              files={formData.allegati}
-              onFilesChange={(files: File[]) =>
-                  setFormData({ ...formData, allegati: files })
+            <FormField label="Durata" htmlFor="durata">
+              <TimeInput
+                value={formData.durata}
+                onChange={(value) =>
+                  setFormData({ ...formData, durata: value })
                 }
-              onUpload={handleUpload}
-              maxSize={10 * 1024 * 1024} // 10MB
-              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp,.txt,.zip,.rar"
-              uploadLabel="Upload allegati"
-              uploadDescription="Trascina i file qui o clicca per sfogliare"
-              existingFiles={formData.uploadedAllegati}
-              onRemoveExisting={(index) => {
-                setFormData(prev => ({
-                  ...prev,
-                  uploadedAllegati: prev.uploadedAllegati.filter((_, i) => i !== index)
-                }))
-              }}
-            />
+                placeholder="00:00"
+              />
+            </FormField>
           </div>
+
+          <FormField label="Note" htmlFor="note">
+            <Textarea
+              id="note"
+              value={formData.note}
+              onChange={(e) =>
+                setFormData({ ...formData, note: e.target.value })
+              }
+              placeholder="Note aggiuntive, dettagli tecnici o commenti..."
+              rows={3}
+            />
+          </FormField>
+
+          <FileUploadFormField
+            label="Allegati"
+            files={formData.allegati}
+            onFilesChange={(files: File[]) =>
+                setFormData({ ...formData, allegati: files })
+              }
+            onUpload={handleUpload}
+            maxSize={10 * 1024 * 1024} // 10MB
+            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp,.txt,.zip,.rar"
+            uploadLabel="Upload allegati"
+            uploadDescription="Trascina i file qui o clicca per sfogliare"
+            existingFiles={formData.uploadedAllegati}
+            onRemoveExisting={(index) => {
+              setFormData(prev => ({
+                ...prev,
+                uploadedAllegati: prev.uploadedAllegati.filter((_, i) => i !== index)
+              }))
+            }}
+          />
         </div>
       </StandardFormSheet>
 
