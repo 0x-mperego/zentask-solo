@@ -979,9 +979,14 @@ function formatBytes(bytes: number) {
   return `${(bytes / 1024 ** i).toFixed(i ? 1 : 0)} ${sizes[i]}`;
 }
 
-function getFileIcon(file: File) {
-  const type = file.type;
-  const extension = file.name.split(".").pop()?.toLowerCase() ?? "";
+function getFileIcon(file: File | null | undefined) {
+  // Fallback per file undefined/null
+  if (!file) {
+    return <FileIcon />;
+  }
+
+  const type = file.type || "";
+  const extension = file.name?.split(".").pop()?.toLowerCase() ?? "";
 
   if (type.startsWith("video/")) {
     return <FileVideoIcon />;
@@ -1063,7 +1068,7 @@ function FileUploadItemPreview(props: FileUploadItemPreviewProps) {
         return (
           <img
             src={url}
-            alt={file.name}
+            alt={file.name || "File"}
             className="size-full object-cover"
             onLoad={(event) => {
               if (!(event.target instanceof HTMLImageElement)) return;
