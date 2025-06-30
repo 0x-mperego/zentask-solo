@@ -87,9 +87,8 @@ const createColumns = (
     header: "Ruolo",
     cell: ({ row }) => (
       <Pill
-        variant={
-          row.original.ruolo === "admin" ? "default" : "secondary"
-        }
+        variant="outline"
+        className="bg-transparent border-transparent"
       >
         {row.original.ruolo === "admin"
           ? "Amministratore"
@@ -321,8 +320,8 @@ export default function UtentiPage() {
                   {utente.nome} {utente.cognome}
                 </h3>
                 <Pill
-                  variant={utente.ruolo === "admin" ? "default" : "secondary"}
-                  className="text-xs"
+                  variant="outline"
+                  className="text-xs bg-transparent border-transparent"
                 >
                   {utente.ruolo === "admin" ? "Amministratore" : "Operatore"}
                 </Pill>

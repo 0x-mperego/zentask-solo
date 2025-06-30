@@ -71,17 +71,15 @@ function createCategorieColumns(
         return (
           <Pill
             variant="outline"
-            style={{
-              backgroundColor: `${colore}15`,
-              borderColor: colore,
-              color: colore,
-            }}
+            className="bg-transparent border-transparent"
           >
             <div
               className="w-2 h-2 rounded-full mr-2"
               style={{ backgroundColor: colore }}
             />
-            {nome}
+            <span style={{ color: colore }}>
+              {nome}
+            </span>
           </Pill>
         )
       },

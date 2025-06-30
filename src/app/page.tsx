@@ -166,18 +166,15 @@ const renderInterventoCard = (
             {stato && (
               <Pill 
                 variant="outline" 
-                className="text-xs"
-                style={{
-                  backgroundColor: `${stato.colore}15`,
-                  borderColor: stato.colore,
-                  color: stato.colore,
-                }}
+                className="text-xs bg-transparent border-transparent"
               >
                 <div
                   className="w-2 h-2 rounded-full mr-1"
                   style={{ backgroundColor: stato.colore }}
                 />
-                {stato.nome}
+                <span style={{ color: stato.colore }}>
+                  {stato.nome}
+                </span>
               </Pill>
             )}
           </div>
@@ -280,7 +277,7 @@ const createInterventiColumns = (
               const descriptionContent = (
           <div className="flex items-center gap-2">
             {attivitaItem && (
-              <Pill variant="secondary" className="text-xs">
+              <Pill variant="outline" className="text-xs bg-transparent border-transparent">
                 {attivitaItem.nome}
               </Pill>
             )}
@@ -329,17 +326,15 @@ const createInterventiColumns = (
       return (
         <Pill
           variant="outline"
-          style={{
-            backgroundColor: `${stato.colore}15`,
-            borderColor: stato.colore,
-            color: stato.colore,
-          }}
+          className="bg-transparent border-transparent"
         >
           <div
             className="w-2 h-2 rounded-full mr-2"
             style={{ backgroundColor: stato.colore }}
           />
-          {stato.nome}
+          <span style={{ color: stato.colore }}>
+            {stato.nome}
+          </span>
         </Pill>
       )
     },

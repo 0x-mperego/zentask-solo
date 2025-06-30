@@ -104,8 +104,8 @@ export function DataTableToolbar({
                   Filtri
                   {activeFilterCount > 0 && (
                     <Pill
-                      variant="secondary"
-                      className="ml-2 h-5 w-5 rounded-full p-0 text-xs"
+                      variant="outline"
+                      className="ml-2 h-5 w-5 rounded-full p-0 text-xs bg-transparent border-transparent"
                     >
                       {activeFilterCount}
                     </Pill>
@@ -181,8 +181,8 @@ export function DataTableToolbar({
             return (
               <Pill
                 key={key}
-                variant="secondary"
-                className="text-xs"
+                variant="outline"
+                className="text-xs bg-transparent border-transparent"
               >
                 <span>
                   {filter?.label}: {option?.label || value}

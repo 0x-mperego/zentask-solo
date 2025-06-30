@@ -234,7 +234,7 @@ export default function ClientiPage() {
             <div className="flex-1 space-y-2">
               <div className="flex items-center gap-2">
                 <h3 className="font-medium leading-none">{cliente.nome}</h3>
-                <Pill variant={cliente.tipo === "Azienda" ? "default" : "secondary"} className="text-xs">
+                <Pill variant="outline" className="text-xs bg-transparent border-transparent">
                   {cliente.tipo}
                 </Pill>
               </div>
@@ -304,7 +304,7 @@ export default function ClientiPage() {
       cell: ({ row }) => {
         const cliente = row.original
         return (
-          <Pill variant={cliente.tipo === "Azienda" ? "default" : "secondary"}>
+          <Pill variant="outline" className="bg-transparent border-transparent">
             {cliente.tipo}
           </Pill>
         )

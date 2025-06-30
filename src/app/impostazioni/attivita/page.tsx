@@ -98,7 +98,7 @@ function createAttivitaColumns(
         const categoria = categorie.find(c => c.id === categoriaId)
         if (!categoria) {
           return (
-            <Pill variant="outline" className="text-xs">
+            <Pill variant="outline" className="text-xs bg-transparent border-transparent">
               Sconosciuto
             </Pill>
           )
@@ -106,18 +106,15 @@ function createAttivitaColumns(
         return (
           <Pill
             variant="outline"
-            className="text-xs"
-            style={{
-              backgroundColor: `${categoria.colore}15`,
-              borderColor: categoria.colore,
-              color: categoria.colore,
-            }}
+            className="text-xs bg-transparent border-transparent"
           >
             <div
               className="w-2 h-2 rounded-full mr-2"
               style={{ backgroundColor: categoria.colore }}
             />
-            {categoria.id}: {categoria.nome}
+            <span style={{ color: categoria.colore }}>
+              {categoria.id}: {categoria.nome}
+            </span>
           </Pill>
         )
       },
