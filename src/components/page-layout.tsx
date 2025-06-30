@@ -125,7 +125,7 @@ export function PageLayout({
             <ThemeToggle />
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0 overflow-x-hidden">
           {isManagementMode ? (
             <>
               <PageHeader title={title} description={description} actionButton={customActionButton} />
