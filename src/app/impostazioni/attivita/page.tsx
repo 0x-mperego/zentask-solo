@@ -100,11 +100,12 @@ function createAttivitaColumns(
           return (
             <Pill 
               variant="outline" 
-              className="bg-transparent text-[0.75rem]"
+              className="bg-transparent text-[0.75rem] font-medium px-[10px] py-[2px]"
               style={{ 
                 color: 'oklch(72% 0 0)', 
                 borderColor: 'oklch(26% 0 0)', 
-                borderWidth: '1px' 
+                borderWidth: '1px',
+                fontWeight: '500'
               }}
             >
               Sconosciuto

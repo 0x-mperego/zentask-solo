@@ -236,11 +236,12 @@ export default function ClientiPage() {
                 <h3 className="font-medium leading-none">{cliente.nome}</h3>
                 <Pill 
                   variant="outline" 
-                  className="bg-transparent text-[0.75rem]"
+                  className="bg-transparent text-[0.75rem] font-medium px-[10px] py-[2px]"
                   style={{ 
                     color: 'oklch(72% 0 0)', 
                     borderColor: 'oklch(26% 0 0)', 
-                    borderWidth: '1px' 
+                    borderWidth: '1px',
+                    fontWeight: '500'
                   }}
                 >
                   {cliente.tipo}
@@ -314,11 +315,12 @@ export default function ClientiPage() {
         return (
           <Pill 
             variant="outline" 
-            className="bg-transparent text-[0.75rem]"
+            className="bg-transparent text-[0.75rem] font-medium px-[10px] py-[2px]"
             style={{ 
               color: 'oklch(72% 0 0)', 
               borderColor: 'oklch(26% 0 0)', 
-              borderWidth: '1px' 
+              borderWidth: '1px',
+              fontWeight: '500'
             }}
           >
             {cliente.tipo}

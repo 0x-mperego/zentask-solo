@@ -69,15 +69,16 @@ function createCategorieColumns(
         const colore = row.getValue("colore") as string
         const nome = row.getValue("nome") as string
         return (
-          <Pill
-            variant="outline"
-            className="bg-transparent text-[0.75rem]"
-            style={{ 
-              color: 'oklch(72% 0 0)', 
-              borderColor: 'oklch(26% 0 0)', 
-              borderWidth: '1px' 
-            }}
-          >
+                      <Pill 
+              variant="outline" 
+              className="bg-transparent text-[0.75rem] font-medium px-[10px] py-[2px]"
+              style={{ 
+                color: 'oklch(72% 0 0)', 
+                borderColor: 'oklch(26% 0 0)', 
+                borderWidth: '1px',
+                fontWeight: '500'
+              }}
+            >
             <div
               className="w-2 h-2 rounded-full mr-2"
               style={{ backgroundColor: colore }}
