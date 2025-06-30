@@ -52,7 +52,11 @@ export function FileUploadSheet({
 
   // Wrapper per onUpload che traccia il progresso
   const handleUpload: FileUploadProps["onUpload"] = React.useCallback(
-    async (files, { onProgress, onSuccess, onError }) => {
+    async (files: File[], { onProgress, onSuccess, onError }: {
+      onProgress: (file: File, progress: number) => void;
+      onSuccess: (file: File) => void;
+      onError: (file: File, error: Error) => void;
+    }) => {
       // Inizializza tutti i file a 0%
       setUploadingFiles(prev => {
         const newMap = new Map(prev);
@@ -123,7 +127,11 @@ export function FileUploadSheet({
   );
 
   const defaultOnUpload: NonNullable<FileUploadProps["onUpload"]> = React.useCallback(
-    async (files, { onProgress, onSuccess, onError }) => {
+    async (files: File[], { onProgress, onSuccess, onError }: {
+      onProgress: (file: File, progress: number) => void;
+      onSuccess: (file: File) => void;
+      onError: (file: File, error: Error) => void;
+    }) => {
       try {
         // Process each file individually 
         for (const file of files) {
