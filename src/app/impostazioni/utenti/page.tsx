@@ -88,7 +88,12 @@ const createColumns = (
     cell: ({ row }) => (
       <Pill
         variant="outline"
-        className="bg-transparent border-transparent"
+        className="bg-transparent text-[0.75rem]"
+        style={{ 
+          color: 'oklch(72% 0 0)', 
+          borderColor: 'oklch(26% 0 0)', 
+          borderWidth: '1px' 
+        }}
       >
         {row.original.ruolo === "admin"
           ? "Amministratore"
@@ -321,7 +326,12 @@ export default function UtentiPage() {
                 </h3>
                 <Pill
                   variant="outline"
-                  className="text-xs bg-transparent border-transparent"
+                  className="bg-transparent text-[0.75rem]"
+                  style={{ 
+                    color: 'oklch(72% 0 0)', 
+                    borderColor: 'oklch(26% 0 0)', 
+                    borderWidth: '1px' 
+                  }}
                 >
                   {utente.ruolo === "admin" ? "Amministratore" : "Operatore"}
                 </Pill>

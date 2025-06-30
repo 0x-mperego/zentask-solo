@@ -166,13 +166,18 @@ const renderInterventoCard = (
             {stato && (
               <Pill 
                 variant="outline" 
-                className="text-xs bg-transparent border-transparent"
+                className="bg-transparent text-[0.75rem]"
+                style={{ 
+                  color: 'oklch(72% 0 0)', 
+                  borderColor: 'oklch(26% 0 0)', 
+                  borderWidth: '1px' 
+                }}
               >
                 <div
                   className="w-2 h-2 rounded-full mr-1"
                   style={{ backgroundColor: stato.colore }}
                 />
-                <span style={{ color: stato.colore }}>
+                <span>
                   {stato.nome}
                 </span>
               </Pill>
@@ -277,7 +282,15 @@ const createInterventiColumns = (
               const descriptionContent = (
           <div className="flex items-center gap-2">
             {attivitaItem && (
-              <Pill variant="outline" className="text-xs bg-transparent border-transparent">
+              <Pill 
+                variant="outline" 
+                className="bg-transparent text-[0.75rem]" 
+                style={{ 
+                  color: 'oklch(72% 0 0)', 
+                  borderColor: 'oklch(26% 0 0)', 
+                  borderWidth: '1px' 
+                }}
+              >
                 {attivitaItem.nome}
               </Pill>
             )}
@@ -326,13 +339,18 @@ const createInterventiColumns = (
       return (
         <Pill
           variant="outline"
-          className="bg-transparent border-transparent"
+          className="bg-transparent text-[0.75rem]"
+          style={{ 
+            color: 'oklch(72% 0 0)', 
+            borderColor: 'oklch(26% 0 0)', 
+            borderWidth: '1px' 
+          }}
         >
           <div
             className="w-2 h-2 rounded-full mr-2"
             style={{ backgroundColor: stato.colore }}
           />
-          <span style={{ color: stato.colore }}>
+          <span>
             {stato.nome}
           </span>
         </Pill>
@@ -349,13 +367,18 @@ const createInterventiColumns = (
       return (
         <Pill 
           variant="outline" 
-          className="bg-transparent border-transparent"
+          className="bg-transparent text-[0.75rem]"
+          style={{ 
+            color: 'oklch(72% 0 0)', 
+            borderColor: 'oklch(26% 0 0)', 
+            borderWidth: '1px' 
+          }}
         >
           <PillAvatar 
             src={dipendente.avatar}
             fallback={getInitials(dipendente.nome, dipendente.cognome)}
           />
-          <span className="text-sm">{dipendente.nome} {dipendente.cognome}</span>
+          <span>{dipendente.nome} {dipendente.cognome}</span>
         </Pill>
       )
     },

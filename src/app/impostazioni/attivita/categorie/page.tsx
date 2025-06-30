@@ -71,13 +71,18 @@ function createCategorieColumns(
         return (
           <Pill
             variant="outline"
-            className="bg-transparent border-transparent"
+            className="bg-transparent text-[0.75rem]"
+            style={{ 
+              color: 'oklch(72% 0 0)', 
+              borderColor: 'oklch(26% 0 0)', 
+              borderWidth: '1px' 
+            }}
           >
             <div
               className="w-2 h-2 rounded-full mr-2"
               style={{ backgroundColor: colore }}
             />
-            <span style={{ color: colore }}>
+            <span>
               {nome}
             </span>
           </Pill>
