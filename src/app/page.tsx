@@ -151,12 +151,14 @@ const renderInterventoCard = (
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1">
+                <div className="w-4 flex-shrink-0">
+                  {intervento.urgente && (
+                    <div className="h-2 w-2 flex-shrink-0 rounded-full bg-red-500" />
+                  )}
+                </div>
                 <span className="text-sm font-mono text-muted-foreground">
                   {intervento.codice}
                 </span>
-                {intervento.urgente && (
-                  <IconAlertTriangle className="h-4 w-4 text-red-500" />
-                )}
               </div>
               <h3 className="font-medium leading-none">{intervento.descrizione}</h3>
             </div>
@@ -251,20 +253,22 @@ const createInterventiColumns = (
   onDelete: (id: number) => void
 ): ColumnDef<Intervento>[] => [
   {
-    accessorKey: "id",
-    header: "ID",
+    id: "id",
+    accessorKey: "codice",
+    header: () => <div className="pl-4">ID</div>,
     cell: ({ row }) => {
       const intervento = row.original
       return (
-        <div className="flex items-center gap-2">
-          {intervento.urgente && (
-            <div className="w-2 h-2 rounded-full bg-red-500" />
-          )}
-          <span className="font-mono text-sm">{intervento.codice}</span>
+        <div className="flex items-center">
+          <div className="w-4 flex-shrink-0">
+            {intervento.urgente && (
+              <div className="h-2 w-2 rounded-full bg-red-500" />
+            )}
+          </div>
+          <span className="font-medium">{intervento.codice}</span>
         </div>
       )
     },
-    enableHiding: false,
   },
   {
     accessorKey: "descrizione",
