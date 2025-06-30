@@ -105,10 +105,8 @@ export function DataTableToolbar({
                   {activeFilterCount > 0 && (
                     <Pill
                       variant="outline"
-                      className="ml-2 h-5 w-5 rounded-full p-0 bg-transparent text-[0.75rem] font-medium"
+                      className="ml-2 h-5 w-5 rounded-full p-0 bg-transparent border-border text-muted-foreground text-[0.75rem] font-medium"
                       style={{ 
-                        color: 'oklch(72% 0 0)', 
-                        borderColor: 'oklch(26% 0 0)', 
                         borderWidth: '1px',
                         fontWeight: '500'
                       }}
@@ -188,10 +186,8 @@ export function DataTableToolbar({
               <Pill
                 key={key}
                 variant="outline"
-                className="bg-transparent text-[0.75rem] font-medium px-[10px] py-[2px]"
+                className="bg-transparent border-border text-muted-foreground text-[0.75rem] font-medium px-[10px] py-[2px]"
                 style={{ 
-                  color: 'oklch(72% 0 0)', 
-                  borderColor: 'oklch(26% 0 0)', 
                   borderWidth: '1px',
                   fontWeight: '500'
                 }}

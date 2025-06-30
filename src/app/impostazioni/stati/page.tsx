@@ -63,16 +63,14 @@ function createColumns(
         return (
           <Pill
             variant="outline"
-            className="bg-transparent text-[0.75rem] font-medium px-[10px] py-[2px]"
+            className="bg-transparent border-border text-muted-foreground text-[0.75rem] font-medium px-[10px] py-[2px]"
             style={{ 
-              color: 'oklch(72% 0 0)', 
-              borderColor: 'oklch(26% 0 0)', 
               borderWidth: '1px',
               fontWeight: '500'
             }}
           >
             <div
-              className="w-2 h-2 rounded-full mr-2"
+              className="h-2 w-2 rounded-full mr-2"
               style={{ backgroundColor: colore }}
             />
             <span>
