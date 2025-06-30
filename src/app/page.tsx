@@ -265,7 +265,7 @@ const createInterventiColumns = (
               <div className="h-2 w-2 rounded-full bg-red-500" />
             )}
           </div>
-          <span className="font-medium text-sm">{intervento.codice}</span>
+          <span className="font-medium text-[0.75rem]">{intervento.codice}</span>
         </div>
       )
     },
@@ -331,7 +331,7 @@ const createInterventiColumns = (
       if (!cliente) return <span className="text-muted-foreground">—</span>
       
       return (
-        <div className="text-sm">{cliente.nome}</div>
+        <div className="text-[0.75rem]">{cliente.nome}</div>
       )
     },
   },
