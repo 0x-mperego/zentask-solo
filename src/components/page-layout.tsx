@@ -19,6 +19,7 @@ import {
 import { PageHeader } from "@/components/page-header"
 import { ContentWrapper } from "@/components/content-wrapper"
 import { useAuth } from "@/contexts/AuthContext"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 interface PageLayoutProps {
   children: React.ReactNode
@@ -93,7 +94,7 @@ export function PageLayout({
       <AppSidebar />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-          <div className="flex items-center gap-2 px-4 lg:px-6">
+          <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator
               orientation="vertical"
@@ -119,6 +120,9 @@ export function PageLayout({
                 </BreadcrumbList>
               </Breadcrumb>
             )}
+          </div>
+          <div className="ml-auto px-4">
+            <ThemeToggle />
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">

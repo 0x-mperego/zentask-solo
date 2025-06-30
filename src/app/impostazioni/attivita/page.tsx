@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ColumnDef } from "@tanstack/react-table"
 import { Badge } from "@/components/ui/badge"
+import { Pill } from "@/components/ui/kibo-ui/pill"
 import { Plus } from "lucide-react"
 import { ColorPicker } from "@/components/color-picker"
 import { toast } from "sonner"
@@ -97,13 +98,13 @@ function createAttivitaColumns(
         const categoria = categorie.find(c => c.id === categoriaId)
         if (!categoria) {
           return (
-            <Badge variant="outline" className="text-xs">
+            <Pill variant="outline" className="text-xs">
               Sconosciuto
-            </Badge>
+            </Pill>
           )
         }
         return (
-          <Badge
+          <Pill
             variant="outline"
             className="text-xs"
             style={{
@@ -117,7 +118,7 @@ function createAttivitaColumns(
               style={{ backgroundColor: categoria.colore }}
             />
             {categoria.id}: {categoria.nome}
-          </Badge>
+          </Pill>
         )
       },
     },

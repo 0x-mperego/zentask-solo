@@ -6,6 +6,7 @@ import { StandardFormSheet } from "@/components/standard-form-sheet"
 import { FormField } from "@/components/form-field"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
+import { Pill } from "@/components/ui/kibo-ui/pill"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
@@ -85,7 +86,7 @@ const createColumns = (
     accessorKey: "ruolo",
     header: "Ruolo",
     cell: ({ row }) => (
-      <Badge
+      <Pill
         variant={
           row.original.ruolo === "admin" ? "default" : "secondary"
         }
@@ -93,7 +94,7 @@ const createColumns = (
         {row.original.ruolo === "admin"
           ? "Amministratore"
           : "Operatore"}
-      </Badge>
+      </Pill>
     ),
   },
   {
@@ -319,12 +320,12 @@ export default function UtentiPage() {
                 <h3 className="font-medium leading-none">
                   {utente.nome} {utente.cognome}
                 </h3>
-                <Badge
+                <Pill
                   variant={utente.ruolo === "admin" ? "default" : "secondary"}
                   className="text-xs"
                 >
                   {utente.ruolo === "admin" ? "Amministratore" : "Operatore"}
-                </Badge>
+                </Pill>
               </div>
               <p className="text-sm text-muted-foreground">{utente.email}</p>
             </div>

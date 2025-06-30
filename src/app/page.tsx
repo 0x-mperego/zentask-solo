@@ -10,6 +10,7 @@ import { useAuth } from "@/contexts/AuthContext"
 import { useEffect, useState } from "react"
 import { type ColumnDef } from "@tanstack/react-table"
 import { Badge } from "@/components/ui/badge"
+import { Pill, PillAvatar, PillIndicator } from "@/components/ui/kibo-ui/pill"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -163,7 +164,7 @@ const renderInterventoCard = (
           
           <div className="flex items-center gap-2">
             {stato && (
-              <Badge 
+              <Pill 
                 variant="outline" 
                 className="text-xs"
                 style={{
@@ -177,7 +178,7 @@ const renderInterventoCard = (
                   style={{ backgroundColor: stato.colore }}
                 />
                 {stato.nome}
-              </Badge>
+              </Pill>
             )}
           </div>
 
@@ -276,16 +277,16 @@ const createInterventiColumns = (
         ? intervento.descrizione.substring(0, maxLength) + "..."
         : intervento.descrizione
 
-      const descriptionContent = (
-        <div className="flex items-center gap-2">
-          {attivitaItem && (
-            <Badge variant="secondary" className="text-xs">
-              {attivitaItem.nome}
-            </Badge>
-          )}
-          <span className="font-medium">{truncatedText}</span>
-        </div>
-      )
+              const descriptionContent = (
+          <div className="flex items-center gap-2">
+            {attivitaItem && (
+              <Pill variant="secondary" className="text-xs">
+                {attivitaItem.nome}
+              </Pill>
+            )}
+            <span className="font-medium">{truncatedText}</span>
+          </div>
+        )
 
       // Se il testo è troncato, mostra il tooltip
       if (isTruncated) {
@@ -326,7 +327,7 @@ const createInterventiColumns = (
       if (!stato) return <span className="text-muted-foreground">—</span>
       
       return (
-        <Badge
+        <Pill
           variant="outline"
           style={{
             backgroundColor: `${stato.colore}15`,
@@ -339,7 +340,7 @@ const createInterventiColumns = (
             style={{ backgroundColor: stato.colore }}
           />
           {stato.nome}
-        </Badge>
+        </Pill>
       )
     },
   },
@@ -351,18 +352,16 @@ const createInterventiColumns = (
       if (!dipendente) return <span className="text-muted-foreground">Non assegnato</span>
       
       return (
-        <Badge 
+        <Pill 
           variant="outline" 
-          className="bg-transparent border-transparent px-2 py-1 flex items-center gap-2 w-fit"
+          className="bg-transparent border-transparent"
         >
-          <Avatar className="h-5 w-5">
-            <AvatarImage src={dipendente.avatar} />
-            <AvatarFallback className="text-xs">
-              {getInitials(dipendente.nome, dipendente.cognome)}
-            </AvatarFallback>
-          </Avatar>
+          <PillAvatar 
+            src={dipendente.avatar}
+            fallback={getInitials(dipendente.nome, dipendente.cognome)}
+          />
           <span className="text-sm">{dipendente.nome} {dipendente.cognome}</span>
-        </Badge>
+        </Pill>
       )
     },
   },
@@ -1162,3 +1161,4 @@ export default function Home() {
     </>
   )
 }
+

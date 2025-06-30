@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
+import { Pill, PillButton } from "@/components/ui/kibo-ui/pill"
 import {
   Select,
   SelectContent,
@@ -102,12 +103,12 @@ export function DataTableToolbar({
                   <IconFilter className="mr-2 h-4 w-4" />
                   Filtri
                   {activeFilterCount > 0 && (
-                    <Badge
+                    <Pill
                       variant="secondary"
                       className="ml-2 h-5 w-5 rounded-full p-0 text-xs"
                     >
                       {activeFilterCount}
-                    </Badge>
+                    </Pill>
                   )}
                   <IconChevronDown className="ml-2 h-4 w-4" />
                 </Button>
@@ -178,23 +179,18 @@ export function DataTableToolbar({
             const option = filter?.options.find(o => o.value === value)
             
             return (
-              <Badge
+              <Pill
                 key={key}
                 variant="secondary"
-                className="gap-1 pr-1"
+                className="text-xs"
               >
-                <span className="text-xs">
+                <span>
                   {filter?.label}: {option?.label || value}
                 </span>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-auto w-auto p-0.5 hover:bg-transparent"
-                  onClick={() => removeFilter(key)}
-                >
+                <PillButton onClick={() => removeFilter(key)}>
                   <IconX className="h-3 w-3" />
-                </Button>
-              </Badge>
+                </PillButton>
+              </Pill>
             )
           })}
           <Button

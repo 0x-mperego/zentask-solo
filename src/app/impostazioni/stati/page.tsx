@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ColumnDef } from "@tanstack/react-table"
 import { Badge } from "@/components/ui/badge"
+import { Pill } from "@/components/ui/kibo-ui/pill"
 import { Plus } from "lucide-react"
 import { ColorPicker } from "@/components/color-picker"
 import { toast } from "sonner"
@@ -60,7 +61,7 @@ function createColumns(
         const colore = row.getValue("colore") as string
         const nome = row.getValue("nome") as string
         return (
-          <Badge
+          <Pill
             variant="outline"
             style={{
               backgroundColor: `${colore}15`,
@@ -73,7 +74,7 @@ function createColumns(
               style={{ backgroundColor: colore }}
             />
             {nome}
-          </Badge>
+          </Pill>
         )
       },
     },

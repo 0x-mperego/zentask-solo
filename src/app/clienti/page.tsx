@@ -7,6 +7,7 @@ import { StandardFormSheet } from "@/components/standard-form-sheet"
 import { FormField } from "@/components/form-field"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
+import { Pill } from "@/components/ui/kibo-ui/pill"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
@@ -233,9 +234,9 @@ export default function ClientiPage() {
             <div className="flex-1 space-y-2">
               <div className="flex items-center gap-2">
                 <h3 className="font-medium leading-none">{cliente.nome}</h3>
-                <Badge variant={cliente.tipo === "Azienda" ? "default" : "secondary"} className="text-xs">
+                <Pill variant={cliente.tipo === "Azienda" ? "default" : "secondary"} className="text-xs">
                   {cliente.tipo}
-                </Badge>
+                </Pill>
               </div>
               <p className="text-sm text-muted-foreground">{cliente.telefono}</p>
               {cliente.note && (
@@ -303,9 +304,9 @@ export default function ClientiPage() {
       cell: ({ row }) => {
         const cliente = row.original
         return (
-          <Badge variant={cliente.tipo === "Azienda" ? "default" : "secondary"}>
+          <Pill variant={cliente.tipo === "Azienda" ? "default" : "secondary"}>
             {cliente.tipo}
-          </Badge>
+          </Pill>
         )
       },
     },
