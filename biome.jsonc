@@ -2,5 +2,23 @@
   "$schema": "https://biomejs.dev/schemas/2.0.5/schema.json",
   "extends": [
     "ultracite"
-  ]
+  ],
+  "linter": {
+    "rules": {
+      "nursery": {
+        "noUnknownAtRule": "off",
+        "noImportantStyles": "off"
+      },
+      "suspicious": {
+        "noConsole": "warn"
+      },
+      "security": {
+        "noDangerouslySetInnerHtml": "warn"
+      },
+      "performance": {
+        "noImgElement": "warn",
+        "noNamespaceImport": "warn"
+      }
+    }
+  }
 }
