@@ -1,35 +1,35 @@
-"use client"
+'use client';
 
 import {
   IconChevronLeft,
   IconChevronRight,
   IconChevronsLeft,
   IconChevronsRight,
-} from "@tabler/icons-react"
+} from '@tabler/icons-react';
 import {
   type ColumnDef,
   type ColumnFiltersState,
-  type SortingState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  type SortingState,
   useReactTable,
-} from "@tanstack/react-table"
-import * as React from "react"
+} from '@tanstack/react-table';
+import * as React from 'react';
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from '@/components/ui/select';
 import {
   Table,
   TableBody,
@@ -37,26 +37,26 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { useIsMobile } from "@/hooks/use-mobile"
+} from '@/components/ui/table';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface GenericDataTableProps<TData> {
-  data: TData[]
-  columns: ColumnDef<TData>[]
-  showPagination?: boolean
-  showItemCount?: boolean
-  onRowClick?: (row: TData) => void
-  itemName?: string
-  mobileCardRender?: (item: TData, onClick?: () => void) => React.ReactNode
-  emptyStateTitle?: string
-  emptyStateDescription?: string
-  emptyStateAction?: React.ReactNode
-  toolbar?: React.ReactNode
+  data: TData[];
+  columns: ColumnDef<TData>[];
+  showPagination?: boolean;
+  showItemCount?: boolean;
+  onRowClick?: (row: TData) => void;
+  itemName?: string;
+  mobileCardRender?: (item: TData, onClick?: () => void) => React.ReactNode;
+  emptyStateTitle?: string;
+  emptyStateDescription?: string;
+  emptyStateAction?: React.ReactNode;
+  toolbar?: React.ReactNode;
   // Supporto per ricerca e filtri
-  searchKey?: string
-  searchValue?: string
-  onSearchChange?: (value: string) => void
-  filteredData?: TData[]
+  searchKey?: string;
+  searchValue?: string;
+  onSearchChange?: (value: string) => void;
+  filteredData?: TData[];
 }
 
 export function GenericDataTable<TData>({
@@ -65,7 +65,7 @@ export function GenericDataTable<TData>({
   showPagination = true,
   showItemCount = true,
   onRowClick,
-  itemName = "elementi",
+  itemName = 'elementi',
   mobileCardRender,
   emptyStateTitle,
   emptyStateDescription,
@@ -76,14 +76,14 @@ export function GenericDataTable<TData>({
   onSearchChange,
   filteredData,
 }: GenericDataTableProps<TData>) {
-  const isMobile = useIsMobile()
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const isMobile = useIsMobile();
+  const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
-  )
+  );
 
   // Usa i dati filtrati se forniti, altrimenti usa i dati originali
-  const tableData = filteredData || data
+  const tableData = filteredData || data;
 
   const table = useReactTable({
     data: tableData,
@@ -98,7 +98,7 @@ export function GenericDataTable<TData>({
       sorting,
       columnFilters,
     },
-  })
+  });
 
   return (
     <div className="w-full space-y-4">
@@ -107,27 +107,30 @@ export function GenericDataTable<TData>({
         // Mobile Card View
         <div className="space-y-3">
           {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <div key={row.id}>
-                {mobileCardRender(row.original, onRowClick ? () => onRowClick(row.original) : undefined)}
-              </div>
-            ))
+            table
+              .getRowModel()
+              .rows.map((row) => (
+                <div key={row.id}>
+                  {mobileCardRender(
+                    row.original,
+                    onRowClick ? () => onRowClick(row.original) : undefined
+                  )}
+                </div>
+              ))
           ) : (
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-12 text-center">
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold">
-                    {emptyStateTitle || "Nessun risultato trovato"}
+                  <h3 className="font-semibold text-lg">
+                    {emptyStateTitle || 'Nessun risultato trovato'}
                   </h3>
                   {emptyStateDescription && (
-                    <p className="text-muted-foreground max-w-md">
+                    <p className="max-w-md text-muted-foreground">
                       {emptyStateDescription}
                     </p>
                   )}
                   {emptyStateAction && (
-                    <div className="pt-2">
-                      {emptyStateAction}
-                    </div>
+                    <div className="pt-2">{emptyStateAction}</div>
                   )}
                 </div>
               </CardContent>
@@ -138,14 +141,18 @@ export function GenericDataTable<TData>({
         // Desktop Table View
         <div className="rounded-md border">
           <Table>
-            <TableHeader className="bg-muted sticky top-0 z-10">
+            <TableHeader className="sticky top-0 z-10 bg-muted">
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
                     return (
-                      <TableHead 
+                      <TableHead
+                        className={
+                          header.column.id === 'actions'
+                            ? 'w-10 pr-4 pl-2'
+                            : 'px-6'
+                        }
                         key={header.id}
-                        className={header.column.id === "actions" ? "pl-2 pr-4 w-10" : "px-6"}
                       >
                         {header.isPlaceholder
                           ? null
@@ -154,7 +161,7 @@ export function GenericDataTable<TData>({
                               header.getContext()
                             )}
                       </TableHead>
-                    )
+                    );
                   })}
                 </TableRow>
               ))}
@@ -163,16 +170,28 @@ export function GenericDataTable<TData>({
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (
                   <TableRow
+                    className={
+                      onRowClick ? 'cursor-pointer hover:bg-muted/50' : ''
+                    }
+                    data-state={row.getIsSelected() && 'selected'}
                     key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                    className={onRowClick ? "cursor-pointer hover:bg-muted/50" : ""}
-                    onClick={onRowClick ? () => onRowClick(row.original) : undefined}
+                    onClick={
+                      onRowClick ? () => onRowClick(row.original) : undefined
+                    }
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell 
+                      <TableCell
+                        className={
+                          cell.column.id === 'actions'
+                            ? 'w-10 py-2 pr-4 pl-2'
+                            : 'px-6 py-2'
+                        }
                         key={cell.id}
-                        className={cell.column.id === "actions" ? "pl-2 pr-4 py-2 w-10" : "px-6 py-2"}
-                        onClick={cell.column.id === "actions" ? (e) => e.stopPropagation() : undefined}
+                        onClick={
+                          cell.column.id === 'actions'
+                            ? (e) => e.stopPropagation()
+                            : undefined
+                        }
                       >
                         {flexRender(
                           cell.column.columnDef.cell,
@@ -185,22 +204,20 @@ export function GenericDataTable<TData>({
               ) : (
                 <TableRow>
                   <TableCell
+                    className="px-6 py-12 text-center"
                     colSpan={columns.length}
-                    className="text-center px-6 py-12"
                   >
                     <div className="space-y-4">
-                      <h3 className="text-lg font-semibold">
-                        {emptyStateTitle || "Nessun risultato trovato"}
+                      <h3 className="font-semibold text-lg">
+                        {emptyStateTitle || 'Nessun risultato trovato'}
                       </h3>
                       {emptyStateDescription && (
-                        <p className="text-muted-foreground max-w-md mx-auto">
+                        <p className="mx-auto max-w-md text-muted-foreground">
                           {emptyStateDescription}
                         </p>
                       )}
                       {emptyStateAction && (
-                        <div className="pt-2">
-                          {emptyStateAction}
-                        </div>
+                        <div className="pt-2">{emptyStateAction}</div>
                       )}
                     </div>
                   </TableCell>
@@ -213,22 +230,22 @@ export function GenericDataTable<TData>({
       {showPagination && table.getPageCount() > 1 && (
         <div className="flex items-center justify-between px-4">
           {showItemCount && (
-            <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
+            <div className="hidden flex-1 text-muted-foreground text-sm lg:flex">
               {table.getFilteredRowModel().rows.length} {itemName} totali
             </div>
           )}
           <div className="flex w-full items-center gap-8 lg:w-fit">
             <div className="hidden items-center gap-2 lg:flex">
-              <Label htmlFor="rows-per-page" className="text-sm font-medium">
+              <Label className="font-medium text-sm" htmlFor="rows-per-page">
                 Righe per pagina
               </Label>
               <Select
-                value={`${table.getState().pagination.pageSize}`}
                 onValueChange={(value) => {
-                  table.setPageSize(Number(value))
+                  table.setPageSize(Number(value));
                 }}
+                value={`${table.getState().pagination.pageSize}`}
               >
-                <SelectTrigger size="sm" className="w-20" id="rows-per-page">
+                <SelectTrigger className="w-20" id="rows-per-page" size="sm">
                   <SelectValue
                     placeholder={table.getState().pagination.pageSize}
                   />
@@ -242,46 +259,46 @@ export function GenericDataTable<TData>({
                 </SelectContent>
               </Select>
             </div>
-            <div className="flex w-fit items-center justify-center text-sm font-medium">
-              Pagina {table.getState().pagination.pageIndex + 1} di{" "}
+            <div className="flex w-fit items-center justify-center font-medium text-sm">
+              Pagina {table.getState().pagination.pageIndex + 1} di{' '}
               {table.getPageCount()}
             </div>
             <div className="ml-auto flex items-center gap-2 lg:ml-0">
               <Button
-                variant="outline"
                 className="hidden h-8 w-8 p-0 lg:flex"
-                onClick={() => table.setPageIndex(0)}
                 disabled={!table.getCanPreviousPage()}
+                onClick={() => table.setPageIndex(0)}
+                variant="outline"
               >
                 <span className="sr-only">Vai alla prima pagina</span>
                 <IconChevronsLeft />
               </Button>
               <Button
-                variant="outline"
                 className="size-8"
-                size="icon"
-                onClick={() => table.previousPage()}
                 disabled={!table.getCanPreviousPage()}
+                onClick={() => table.previousPage()}
+                size="icon"
+                variant="outline"
               >
                 <span className="sr-only">Vai alla pagina precedente</span>
                 <IconChevronLeft />
               </Button>
               <Button
-                variant="outline"
                 className="size-8"
-                size="icon"
-                onClick={() => table.nextPage()}
                 disabled={!table.getCanNextPage()}
+                onClick={() => table.nextPage()}
+                size="icon"
+                variant="outline"
               >
                 <span className="sr-only">Vai alla pagina successiva</span>
                 <IconChevronRight />
               </Button>
               <Button
-                variant="outline"
                 className="hidden size-8 lg:flex"
-                size="icon"
-                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
                 disabled={!table.getCanNextPage()}
+                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                size="icon"
+                variant="outline"
               >
                 <span className="sr-only">Vai all'ultima pagina</span>
                 <IconChevronsRight />
@@ -298,5 +315,5 @@ export function GenericDataTable<TData>({
         </div>
       )}
     </div>
-  )
+  );
 }

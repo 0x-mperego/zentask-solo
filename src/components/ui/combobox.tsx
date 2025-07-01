@@ -1,10 +1,8 @@
-"use client"
+'use client';
 
-import * as React from "react"
-import { Check, ChevronsUpDown } from "lucide-react"
-
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { Check, ChevronsUpDown } from 'lucide-react';
+import * as React from 'react';
+import { Button } from '@/components/ui/button';
 import {
   Command,
   CommandEmpty,
@@ -12,57 +10,58 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
+} from '@/components/ui/command';
 import {
   Drawer,
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer"
-import { useIsMobile } from "@/hooks/use-mobile"
+} from '@/components/ui/drawer';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
 
 interface Option {
-  value: string
-  label: string
+  value: string;
+  label: string;
 }
 
 interface ComboboxProps {
-  options: Option[]
-  value?: string
-  onValueChange?: (value: string) => void
-  placeholder?: string
-  searchPlaceholder?: string
-  emptyText?: string
-  className?: string
-  disabled?: boolean
-  showIcon?: boolean
-  showCheck?: boolean
-  useDrawerOnMobile?: boolean
+  options: Option[];
+  value?: string;
+  onValueChange?: (value: string) => void;
+  placeholder?: string;
+  searchPlaceholder?: string;
+  emptyText?: string;
+  className?: string;
+  disabled?: boolean;
+  showIcon?: boolean;
+  showCheck?: boolean;
+  useDrawerOnMobile?: boolean;
 }
 
 export function Combobox({
   options,
   value,
   onValueChange,
-  placeholder = "Select option...",
-  searchPlaceholder = "Search...",
-  emptyText = "No option found.",
+  placeholder = 'Select option...',
+  searchPlaceholder = 'Search...',
+  emptyText = 'No option found.',
   className,
   disabled = false,
   showIcon = true,
   showCheck = true,
   useDrawerOnMobile = false,
 }: ComboboxProps) {
-  const [open, setOpen] = React.useState(false)
-  const isMobile = useIsMobile()
+  const [open, setOpen] = React.useState(false);
+  const isMobile = useIsMobile();
 
-  const selectedOption = options.find((option) => option.value === value)
+  const selectedOption = options.find((option) => option.value === value);
 
   const CommandContent = () => (
     <Command>
@@ -73,18 +72,18 @@ export function Combobox({
           {options.map((option) => (
             <CommandItem
               key={option.value}
-              value={option.value}
               onSelect={(currentValue) => {
-                const newValue = currentValue === value ? "" : currentValue
-                onValueChange?.(newValue)
-                setOpen(false)
+                const newValue = currentValue === value ? '' : currentValue;
+                onValueChange?.(newValue);
+                setOpen(false);
               }}
+              value={option.value}
             >
               {showCheck && (
                 <Check
                   className={cn(
-                    "mr-2 h-4 w-4",
-                    value === option.value ? "opacity-100" : "opacity-0"
+                    'mr-2 h-4 w-4',
+                    value === option.value ? 'opacity-100' : 'opacity-0'
                   )}
                 />
               )}
@@ -94,25 +93,27 @@ export function Combobox({
         </CommandGroup>
       </CommandList>
     </Command>
-  )
+  );
 
   const TriggerButton = ({ asChild = false, ...props }) => (
     <Button
-      variant="outline"
-      role="combobox"
       aria-expanded={open}
-      className={cn("w-full justify-between", className)}
+      className={cn('w-full justify-between', className)}
       disabled={disabled}
+      role="combobox"
+      variant="outline"
       {...(asChild ? {} : props)}
     >
       {selectedOption ? selectedOption.label : placeholder}
-      {showIcon && <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />}
+      {showIcon && (
+        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+      )}
     </Button>
-  )
+  );
 
   if (isMobile && useDrawerOnMobile) {
     return (
-      <Drawer open={open} onOpenChange={setOpen}>
+      <Drawer onOpenChange={setOpen} open={open}>
         <DrawerTrigger asChild>
           <TriggerButton />
         </DrawerTrigger>
@@ -125,11 +126,11 @@ export function Combobox({
           </div>
         </DrawerContent>
       </Drawer>
-    )
+    );
   }
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover onOpenChange={setOpen} open={open}>
       <PopoverTrigger asChild>
         <TriggerButton />
       </PopoverTrigger>
@@ -137,5 +138,5 @@ export function Combobox({
         <CommandContent />
       </PopoverContent>
     </Popover>
-  )
-} 
+  );
+}

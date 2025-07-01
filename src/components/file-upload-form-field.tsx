@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { FormField } from "@/components/form-field";
-import { FileUploadSheet } from "@/components/file-upload-sheet";
-import { type FileUploadProps } from "@/components/ui/file-upload";
+import { FileUploadSheet } from '@/components/file-upload-sheet';
+import { FormField } from '@/components/form-field';
+import type { FileUploadProps } from '@/components/ui/file-upload';
 
 // Interfaccia per gli allegati esistenti
 interface Allegato {
@@ -16,7 +16,7 @@ interface FileUploadFormFieldProps {
   label: string;
   files: File[];
   onFilesChange: (files: File[]) => void;
-  onUpload?: FileUploadProps["onUpload"];
+  onUpload?: FileUploadProps['onUpload'];
   maxFiles?: number;
   accept?: string;
   maxSize?: number;
@@ -39,8 +39,8 @@ export function FileUploadFormField({
   accept,
   maxSize,
   description,
-  uploadLabel = "Carica file",
-  uploadDescription = "Trascina i file qui o clicca per sfogliare",
+  uploadLabel = 'Carica file',
+  uploadDescription = 'Trascina i file qui o clicca per sfogliare',
   disabled = false,
   required = false,
   className,
@@ -48,25 +48,21 @@ export function FileUploadFormField({
   onRemoveExisting,
 }: FileUploadFormFieldProps) {
   return (
-    <FormField
-      label={label}
-      description={description}
-      required={required}
-    >
+    <FormField description={description} label={label} required={required}>
       <FileUploadSheet
-        files={files}
-        onFilesChange={onFilesChange}
-        onUpload={onUpload}
-        maxFiles={maxFiles}
         accept={accept}
-        maxSize={maxSize}
-        label={uploadLabel}
+        className={className}
         description={uploadDescription}
         disabled={disabled}
-        className={className}
         existingFiles={existingFiles}
+        files={files}
+        label={uploadLabel}
+        maxFiles={maxFiles}
+        maxSize={maxSize}
+        onFilesChange={onFilesChange}
         onRemoveExisting={onRemoveExisting}
+        onUpload={onUpload}
       />
     </FormField>
   );
-} 
+}

@@ -1,64 +1,69 @@
-"use client"
+'use client';
 
-import React, { createContext, useContext, useEffect, useState } from "react"
+import type React from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 interface SettingsContextType {
-  companyName: string
-  updateCompanyName: (name: string) => void
-  companyDescription: string
-  updateCompanyDescription: (description: string) => void
-  companyLogo: string | null
-  updateCompanyLogo: (logo: string | null) => void
-  userAvatar: string
-  updateUserAvatar: (avatar: string) => void
+  companyName: string;
+  updateCompanyName: (name: string) => void;
+  companyDescription: string;
+  updateCompanyDescription: (description: string) => void;
+  companyLogo: string | null;
+  updateCompanyLogo: (logo: string | null) => void;
+  userAvatar: string;
+  updateUserAvatar: (avatar: string) => void;
 }
 
 const SettingsContext = createContext<SettingsContextType | undefined>(
   undefined
-)
+);
 
 export function SettingsProvider({ children }: { children: React.ReactNode }) {
-  const [companyName, setCompanyName] = useState("ZenTask")
-  const [companyDescription, setCompanyDescription] = useState("Gestione Interventi")
-  const [companyLogo, setCompanyLogo] = useState<string | null>(null)
-  const [userAvatar, setUserAvatar] = useState("/avatars/admin.jpg")
+  const [companyName, setCompanyName] = useState('ZenTask');
+  const [companyDescription, setCompanyDescription] = useState(
+    'Gestione Interventi'
+  );
+  const [companyLogo, setCompanyLogo] = useState<string | null>(null);
+  const [userAvatar, setUserAvatar] = useState('/avatars/admin.jpg');
 
   // Load settings from localStorage on mount
   useEffect(() => {
-    const savedCompanyName = localStorage.getItem("zentask_company_name")
-    const savedCompanyDescription = localStorage.getItem("zentask_company_description")
-    const savedCompanyLogo = localStorage.getItem("zentask_company_logo")
-    const savedUserAvatar = localStorage.getItem("zentask_user_avatar")
+    const savedCompanyName = localStorage.getItem('zentask_company_name');
+    const savedCompanyDescription = localStorage.getItem(
+      'zentask_company_description'
+    );
+    const savedCompanyLogo = localStorage.getItem('zentask_company_logo');
+    const savedUserAvatar = localStorage.getItem('zentask_user_avatar');
 
-    if (savedCompanyName) setCompanyName(savedCompanyName)
-    if (savedCompanyDescription) setCompanyDescription(savedCompanyDescription)
-    if (savedCompanyLogo) setCompanyLogo(savedCompanyLogo)
-    if (savedUserAvatar) setUserAvatar(savedUserAvatar)
-  }, [])
+    if (savedCompanyName) setCompanyName(savedCompanyName);
+    if (savedCompanyDescription) setCompanyDescription(savedCompanyDescription);
+    if (savedCompanyLogo) setCompanyLogo(savedCompanyLogo);
+    if (savedUserAvatar) setUserAvatar(savedUserAvatar);
+  }, []);
 
   const updateCompanyName = (name: string) => {
-    setCompanyName(name)
-    localStorage.setItem("zentask_company_name", name)
-  }
+    setCompanyName(name);
+    localStorage.setItem('zentask_company_name', name);
+  };
 
   const updateCompanyDescription = (description: string) => {
-    setCompanyDescription(description)
-    localStorage.setItem("zentask_company_description", description)
-  }
+    setCompanyDescription(description);
+    localStorage.setItem('zentask_company_description', description);
+  };
 
   const updateCompanyLogo = (logo: string | null) => {
-    setCompanyLogo(logo)
+    setCompanyLogo(logo);
     if (logo) {
-      localStorage.setItem("zentask_company_logo", logo)
+      localStorage.setItem('zentask_company_logo', logo);
     } else {
-      localStorage.removeItem("zentask_company_logo")
+      localStorage.removeItem('zentask_company_logo');
     }
-  }
+  };
 
   const updateUserAvatar = (avatar: string) => {
-    setUserAvatar(avatar)
-    localStorage.setItem("zentask_user_avatar", avatar)
-  }
+    setUserAvatar(avatar);
+    localStorage.setItem('zentask_user_avatar', avatar);
+  };
 
   return (
     <SettingsContext.Provider
@@ -75,13 +80,13 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     >
       {children}
     </SettingsContext.Provider>
-  )
+  );
 }
 
 export function useSettings() {
-  const context = useContext(SettingsContext)
+  const context = useContext(SettingsContext);
   if (context === undefined) {
-    throw new Error("useSettings must be used within a SettingsProvider")
+    throw new Error('useSettings must be used within a SettingsProvider');
   }
-  return context
+  return context;
 }

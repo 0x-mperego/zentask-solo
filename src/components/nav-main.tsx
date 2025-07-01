@@ -1,18 +1,18 @@
-"use client"
+'use client';
 
-import { ChevronRight, type LucideIcon } from "lucide-react"
+import { ChevronRight, type LucideIcon } from 'lucide-react';
 
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from '@/components/ui/collapsible';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from '@/components/ui/dropdown-menu';
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -23,23 +23,23 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
   useSidebar,
-} from "@/components/ui/sidebar"
+} from '@/components/ui/sidebar';
 
 export function NavMain({
   items,
 }: {
   items: {
-    title: string
-    url: string
-    icon?: any
-    isActive?: boolean
+    title: string;
+    url: string;
+    icon?: any;
+    isActive?: boolean;
     items?: {
-      title: string
-      url: string
-    }[]
-  }[]
+      title: string;
+      url: string;
+    }[];
+  }[];
 }) {
-  const { state } = useSidebar()
+  const { state } = useSidebar();
 
   return (
     <SidebarGroup>
@@ -48,7 +48,7 @@ export function NavMain({
           // Se l'elemento ha sottoelementi
           if (item.items && item.items.length > 0) {
             // Quando la sidebar è collassata, mostra un dropdown al hover
-            if (state === "collapsed") {
+            if (state === 'collapsed') {
               return (
                 <SidebarMenuItem key={item.title}>
                   <DropdownMenu>
@@ -59,13 +59,13 @@ export function NavMain({
                       </SidebarMenuButton>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
-                      side="right"
                       align="start"
                       className="w-48"
+                      side="right"
                     >
                       {item.items.map((subItem) => (
-                        <DropdownMenuItem key={subItem.title} asChild>
-                          <a href={subItem.url} className="cursor-pointer">
+                        <DropdownMenuItem asChild key={subItem.title}>
+                          <a className="cursor-pointer" href={subItem.url}>
                             {subItem.title}
                           </a>
                         </DropdownMenuItem>
@@ -73,16 +73,16 @@ export function NavMain({
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </SidebarMenuItem>
-              )
+              );
             }
-            
+
             // Quando la sidebar è espansa, usa il comportamento collapsible normale
             return (
               <Collapsible
-                key={item.title}
                 asChild
-                defaultOpen={item.isActive}
                 className="group/collapsible"
+                defaultOpen={item.isActive}
+                key={item.title}
               >
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
@@ -107,9 +107,9 @@ export function NavMain({
                   </CollapsibleContent>
                 </SidebarMenuItem>
               </Collapsible>
-            )
+            );
           }
-          
+
           // Altrimenti usa un semplice menu button
           return (
             <SidebarMenuItem key={item.title}>
@@ -120,9 +120,9 @@ export function NavMain({
                 </a>
               </SidebarMenuButton>
             </SidebarMenuItem>
-          )
+          );
         })}
       </SidebarMenu>
     </SidebarGroup>
-  )
+  );
 }

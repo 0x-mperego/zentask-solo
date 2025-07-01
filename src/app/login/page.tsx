@@ -1,11 +1,11 @@
-"use client"
+'use client';
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useAuth } from "@/contexts/AuthContext"
-import { useSettings } from "@/contexts/SettingsContext"
-import { useState } from "react"
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useAuth } from '@/contexts/AuthContext';
+import { useSettings } from '@/contexts/SettingsContext';
 
 const Logo = (
   props: React.JSX.IntrinsicAttributes & React.SVGProps<SVGSVGElement>
@@ -29,110 +29,110 @@ const Logo = (
       <path d="m13.9956 29.8973c-.9518-1.019-1.6451-2.2826-1.9751-3.6862l-10.95836 2.9363 1.05385 3.933z" />
     </g>
   </svg>
-)
+);
 
 export default function LoginPage() {
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
-  const [error, setError] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const { login } = useAuth()
-  const { companyName, companyLogo } = useSettings()
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const { login } = useAuth();
+  const { companyName, companyLogo } = useSettings();
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError("")
+    e.preventDefault();
+    setIsLoading(true);
+    setError('');
 
-    const success = login(username, password)
+    const success = login(username, password);
 
     if (!success) {
-      setError("Invalid credentials. Use admin/admin123")
+      setError('Invalid credentials. Use admin/admin123');
     }
 
-    setIsLoading(false)
-  }
+    setIsLoading(false);
+  };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex min-h-screen items-center justify-center">
       <div className="flex flex-1 flex-col justify-center px-4 py-10 lg:px-6">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="flex items-center space-x-1.5">
             {companyLogo ? (
               <img
-                src={companyLogo}
                 alt={companyName}
                 className="h-7 w-7 object-contain"
+                src={companyLogo}
               />
             ) : (
               <Logo
-                className="h-7 w-7 text-foreground dark:text-foreground"
                 aria-hidden={true}
+                className="h-7 w-7 text-foreground dark:text-foreground"
               />
             )}
-            <p className="font-medium text-lg text-foreground dark:text-foreground">
+            <p className="font-medium text-foreground text-lg dark:text-foreground">
               {companyName}
             </p>
           </div>
-          <h3 className="mt-6 text-lg font-semibold text-foreground dark:text-foreground">
+          <h3 className="mt-6 font-semibold text-foreground text-lg dark:text-foreground">
             Sign in to your account
           </h3>
-          <p className="mt-2 text-sm text-muted-foreground dark:text-muted-foreground">
+          <p className="mt-2 text-muted-foreground text-sm dark:text-muted-foreground">
             Welcome back! Access your technical support management platform.
           </p>
 
-          <form onSubmit={handleLogin} className="mt-6 space-y-4">
+          <form className="mt-6 space-y-4" onSubmit={handleLogin}>
             <div>
               <Label
+                className="font-medium text-foreground text-sm dark:text-foreground"
                 htmlFor="username"
-                className="text-sm font-medium text-foreground dark:text-foreground"
               >
                 Username
               </Label>
               <Input
-                type="text"
+                autoComplete="username"
+                className="mt-2"
                 id="username"
                 name="username"
-                autoComplete="username"
-                placeholder="Enter your username"
-                value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="mt-2"
+                placeholder="Enter your username"
                 required
+                type="text"
+                value={username}
               />
             </div>
             <div>
               <Label
+                className="font-medium text-foreground text-sm dark:text-foreground"
                 htmlFor="password"
-                className="text-sm font-medium text-foreground dark:text-foreground"
               >
                 Password
               </Label>
               <Input
-                type="password"
+                autoComplete="current-password"
+                className="mt-2"
                 id="password"
                 name="password"
-                autoComplete="current-password"
-                placeholder="Enter your password"
-                value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-2"
+                placeholder="Enter your password"
                 required
+                type="password"
+                value={password}
               />
             </div>
             {error && (
-              <div className="text-red-500 text-sm text-center">{error}</div>
+              <div className="text-center text-red-500 text-sm">{error}</div>
             )}
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Signing in..." : "Sign in"}
+            <Button className="w-full" disabled={isLoading} type="submit">
+              {isLoading ? 'Signing in...' : 'Sign in'}
             </Button>
           </form>
 
-          <div className="mt-6 text-xs text-gray-500 text-center">
+          <div className="mt-6 text-center text-gray-500 text-xs">
             Demo credentials: admin / admin123
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
