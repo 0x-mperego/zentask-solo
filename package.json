@@ -16,6 +16,22 @@
     "biome:ci": "biome ci ./src",
     "registry:build": "shadcn build"
   },
+  "pnpm": {
+    "allowed-build-scripts": [
+      "@tailwindcss/oxide",
+      "esbuild",
+      "msw",
+      "sharp",
+      "unrs-resolver"
+    ],
+    "onlyBuiltDependencies": [
+      "@tailwindcss/oxide",
+      "esbuild",
+      "msw",
+      "sharp",
+      "unrs-resolver"
+    ]
+  },
   "dependencies": {
     "@bprogress/next": "^3.2.12",
     "@dnd-kit/core": "^6.3.1",
